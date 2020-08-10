@@ -1,5 +1,4 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 // class responsible for game development
 // includes current state, possible moves
@@ -19,6 +18,15 @@ public class Board {
 	private Position playerPosition;
 	private Set<Position> boxPositions;
 	private Set<Position> goalPositions;
+
+	private Board(Board board) {
+		this.height = board.getHeight();
+		this.width = board.getWidth();
+		this.board = board.getBoard();
+		this.playerPosition = board.getPlayerPosition();
+		this.boxPositions = board.getBoxPositions();
+		this.goalPositions = board.getGoalPositions();
+	}
 
 	public Board(String s) throws Exception
 	{
@@ -84,7 +92,15 @@ public class Board {
 		if(goals < boxes)
 			throw new Exception("Not enough goals for the boxes on this board!");
 	}
-	
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
 	public void printBoard()
 	{
 		for(int i=0; i < height; i++)
@@ -170,5 +186,112 @@ public class Board {
 			return this.playerPosition.equals(toCompare.getPlayerPosition()) && this.boxPositions.equals(toCompare.getBoxPositions());
 		}
 		return false;
+	}
+
+	public boolean isValidPosition(Position position) {
+		int row = position.getRow();
+		int col = position.getCol();
+		return row >= 0 && row < width && col >= 0 && col < height && !isWall(row, col);
+	}
+
+	private boolean isEmpty(Position position) {
+		return board[position.getRow()][position.getCol()] == EMPTY_ICON;
+	}
+
+	public boolean isWall(int row, int col) {
+		return board[row][col] == WALL_ICON;
+	}
+
+	public boolean isGoal(int row, int col) {
+		return board[row][col] == GOAL_ICON;
+	}
+
+	private Position getCoordinatesWithMoveApplied(Position currentPosition, String direction) {
+		Position toReturn = currentPosition;
+		switch (direction) {
+			case "UP":
+				toReturn = new Position(currentPosition.getRow() - 1, currentPosition.getCol());
+				break;
+			case "RIGHT":
+				toReturn = new Position(currentPosition.getRow(), currentPosition.getCol() + 1);
+				break;
+			case "LEFT":
+				toReturn = new Position(currentPosition.getRow(), currentPosition.getCol() - 1);
+				break;
+			case "DOWN":
+				toReturn = new Position(currentPosition.getRow() + 1, currentPosition.getCol());
+				break;
+		}
+		return toReturn;
+	}
+
+	public void setPlayerPosition(Position playerPosition) {
+		this.playerPosition = playerPosition;
+	}
+
+	private void setPlayerNewPosition(Position oldPosition, Position futurePosition) {
+		this.board[oldPosition.getRow()][oldPosition.getCol()] = EMPTY_ICON;
+		this.board[futurePosition.getRow()][futurePosition.getCol()] = PLAYER_ICON;
+		this.setPlayerPosition(futurePosition);
+	}
+
+	private void setBoxNewPosition(Position currentPlayerPosition, Position currentBoxPosition, Position futureBoxPosition) {
+		this.board[currentPlayerPosition.getRow()][currentPlayerPosition.getCol()] = EMPTY_ICON;
+		this.board[currentBoxPosition.getRow()][currentBoxPosition.getCol()] = PLAYER_ICON;
+		if(this.board[futureBoxPosition.getRow()][futureBoxPosition.getCol()] == GOAL_ICON) {
+			this.board[futureBoxPosition.getRow()][futureBoxPosition.getCol()] = BOX_ON_GOAL_ICON;
+		} else {
+			this.board[futureBoxPosition.getRow()][futureBoxPosition.getCol()] = BOX_ICON;
+		}
+	}
+
+	public char[][] getBoard() {
+		return board;
+	}
+
+	private boolean isBox(Position position) {
+		return board[position.getRow()][position.getCol()] == BOX_ICON;
+	}
+
+	private Board movePlayer(String direction) {
+		Position futurePossiblePosition = getCoordinatesWithMoveApplied(getPlayerPosition(), direction);
+		if(!isValidPosition(futurePossiblePosition))
+			return null;
+		Board futureBoard = new Board(this);
+		System.out.println("FUTURE POSITION GOING " + direction + " IS `" + board[futurePossiblePosition.getRow()][futurePossiblePosition.getCol()] + "");
+		if(isEmpty(futurePossiblePosition)) {
+			futureBoard.setPlayerNewPosition(getPlayerPosition(), futurePossiblePosition);
+		} else if(isBox(futurePossiblePosition)) {
+			Position futurePushedBoxPosition = getCoordinatesWithMoveApplied(futurePossiblePosition, direction);
+			if(!isValidPosition(futurePushedBoxPosition))
+				return null;
+			futureBoard.setBoxNewPosition(getPlayerPosition(), futurePossiblePosition, futurePushedBoxPosition);
+		} else {
+			return null;
+		}
+		return futureBoard;
+	}
+
+	public List<Board> getPossibleMoves() {
+		List<Board> possibleMoves = new ArrayList<>();
+		Board currentBoard;
+		List<String> movesDone = new ArrayList<>();
+		if(( currentBoard = this.movePlayer("UP") ) != null) {
+			movesDone.add("UP");
+			possibleMoves.add(currentBoard);
+		}
+		if(( currentBoard = this.movePlayer("RIGHT") ) != null) {
+			movesDone.add("RIGHT");
+			possibleMoves.add(currentBoard);
+		}
+		if(( currentBoard = this.movePlayer("LEFT") ) != null) {
+			movesDone.add("LEFT");
+			possibleMoves.add(currentBoard);
+		}
+		if(( currentBoard = this.movePlayer("DOWN") ) != null) {
+			movesDone.add("DOWN");
+			possibleMoves.add(currentBoard);
+		}
+		return possibleMoves;
 	}
 }
