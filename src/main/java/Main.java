@@ -36,7 +36,27 @@ public class Main {
         System.out.println("Boxes: " +b.getBoxPositions());
         System.out.println("Goals: " +b.getGoalPositions());
         System.out.println("Finished: " +b.isCompleted());
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("DFS", 1000);
+        
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("DFS", 10000);
 		artificialIntelligence.solve(b);
+		
+/* Ejemplos de prueba:
+
+#######
+# .   #
+##$####
+## #
+##@#
+####
+
+########
+##. $ ##
+# .    #
+##$ ####
+##  #
+##@ #
+#####
+
+*/
     }
 }
