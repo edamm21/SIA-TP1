@@ -30,17 +30,13 @@ public class Main {
 			return;
 		}
         Board b = new Board(initBoard);
-        b.printBoard();
-        
-        System.out.println("\nPlayer: " +b.getPlayerPosition());
-        System.out.println("Boxes: " +b.getBoxPositions());
-        System.out.println("Goals: " +b.getGoalPositions());
-        System.out.println("Finished: " +b.isCompleted());
-        
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("DFS", 10000);
-		artificialIntelligence.solve(b);
+
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, 10000);
+        artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
+
+MUY SIMPLE:
 
 #######
 # .   #
@@ -48,6 +44,8 @@ public class Main {
 ## #
 ##@#
 ####
+
+FACIL:
 
 ########
 ##. $ ##
@@ -57,6 +55,53 @@ public class Main {
 ##@ #
 #####
 
+INTERMEDIO (BFS da 32 pasos):
+  #####
+###  .#
+#.@$  ##
+#####  ##
+#. .# $ #
+#$ $#   #
+#       #
+#########
+
+COMPLICADO (BFS da 60 pasos):
+     #####
+     #   #
+     #   #
+#### #   #
+#  ####$#####
+#           #
+# .## # ##. #
+#           #
+#####$####  #
+   #   # ####
+   # @ #
+   #   #
+   #####
+
+DIFÍCIL (BFS da 78 pasos)
+      ###
+      #.#
+  #####.#####
+ ##         ##
+##  # # # #  ##
+#  ##     ##  #
+# ##  # #  ## #
+#     $@$     #
+####  ###  ####
+   #### ####
+   
+IMPOSIBLE (BFS da 83 pasos, tardó 22 minutos!)
+############
+##      #  #
+#  #.   #  #
+#      .#  #
+##$$##@##$$##
+ #  #.      #
+ #  #   .#  #
+ #  #      ##
+ ###########
 */
     }
 }

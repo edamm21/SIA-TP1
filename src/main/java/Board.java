@@ -84,7 +84,7 @@ public class Board {
 					boxPositions.add(new Position(i, j));
 					boxes++;
 				}
-				if(string[index] == GOAL_ICON || string[index] == BOX_ON_GOAL_ICON)
+				if(string[index] == GOAL_ICON || string[index] == BOX_ON_GOAL_ICON || string[index] == PLAYER_ON_GOAL_ICON)
 				{
 					goalPositions.add(new Position(i, j));
 					goals++;
@@ -189,22 +189,17 @@ public class Board {
 			return true;
 		return false;
 	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		if(o instanceof Board)
-		{
-			Board toCompare = (Board) o;
-			return this.playerPosition.equals(toCompare.getPlayerPosition()) && this.boxPositions.equals(toCompare.getBoxPositions());
-		}
-		return false;
-	}
 
-	public boolean isValidPosition(Position position) {
+	public boolean isValidPositionForPlayer(Position position) {
 		int row = position.getRow();
 		int col = position.getCol();
-		return row >= 0 && row < width && col >= 0 && col < height && !isWall(row, col);
+		return row >= 0 && row < height && col >= 0 && col < width && !isWall(row, col);
+	}
+	
+	public boolean isValidPositionForBox(Position position) {
+		int row = position.getRow();
+		int col = position.getCol();
+		return row >= 0 && row < height && col >= 0 && col < width && isEmpty(position);
 	}
 
 	private boolean isEmpty(Position position) {
@@ -278,22 +273,22 @@ public class Board {
 
 	public Board movePlayer(String direction) {
 		Position futurePossiblePosition = getCoordinatesWithMoveApplied(getPlayerPosition(), direction);
-		if(!isValidPosition(futurePossiblePosition))
+		if(!isValidPositionForPlayer(futurePossiblePosition))
 			return null;
 		Board futureBoard = new Board(this);
 		if(isEmpty(futurePossiblePosition)) {
 			futureBoard.setPlayerPosition(futurePossiblePosition);
 		} else if(isBox(futurePossiblePosition)) {
 			Position futurePushedBoxPosition = getCoordinatesWithMoveApplied(futurePossiblePosition, direction);
-			if(!isValidPosition(futurePushedBoxPosition))
+			if(!isValidPositionForBox(futurePushedBoxPosition))
 				return null;
 			futureBoard.setBoxNewPosition(futurePossiblePosition, futurePushedBoxPosition);
 			futureBoard.setPlayerPosition(futurePossiblePosition);
 		} else {
 			return null;
 		}
-		System.out.println("\nGOING " +direction +" IT WOULD LOOK LIKE THIS:");
-		futureBoard.printBoard();
+		//System.out.println("\nGOING " +direction +" IT WOULD LOOK LIKE THIS: " +futureBoard.hashCode());
+		//futureBoard.printBoard();
 		return futureBoard;
 	}
 
@@ -306,8 +301,48 @@ public class Board {
 			possibleMoves.add(currentBoard);
 		if(( currentBoard = this.movePlayer("LEFT") ) != null)
 			possibleMoves.add(currentBoard);
-		if(( currentBoard = this.movePlayer("RIGHT") ) != null) 
+		if(( currentBoard = this.movePlayer("RIGHT") ) != null)
 			possibleMoves.add(currentBoard);
 		return possibleMoves;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Board)
+		{
+			Board toCompare = (Board) o;
+			return this.playerPosition.equals(toCompare.getPlayerPosition()) && this.boxPositions.equals(toCompare.getBoxPositions());
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String s = "\n";
+		for(int i=0; i < height; i++)
+		{
+			for(int j=0; j < width; j++)
+			{
+				s += board[i][j];
+			}
+			s+="\n";
+		}
+		return s;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int hashCode = 1;
+		for(int i=0; i < height; i++)
+		{
+			for(int j=0; j < width; j++)
+			{
+				hashCode = 31 * hashCode + board[i][j];
+			}
+		}
+		return hashCode;
 	}
 }

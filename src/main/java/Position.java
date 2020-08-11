@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Position {
 
     private int row;
@@ -45,7 +47,7 @@ public class Position {
 	public int hashCode()
 	{
 		int hashCode = 1;
-		hashCode = (int) (31 * hashCode + row);
+		hashCode = 31 * hashCode + row;
 		hashCode = 31 * hashCode + col;
 		return hashCode;
 	}
