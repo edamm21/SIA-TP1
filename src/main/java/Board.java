@@ -270,6 +270,45 @@ public class Board {
 	private boolean isBox(Position position) {
 		return board[position.getRow()][position.getCol()] == BOX_ICON || board[position.getRow()][position.getCol()] == BOX_ON_GOAL_ICON;
 	}
+	
+	public boolean isDeadlock()
+	{
+		int i, j;
+		for(Position p : boxPositions)
+		{
+			i = p.getRow();
+			j = p.getCol();
+			
+			// NW block
+			if(i == 0 && j == 0)
+				return true;
+			boolean wallsNW = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON) && (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON); // Blocked up and left
+			if(i>0 && j>0 && wallsNW && !goalPositions.contains(p))
+				return true;
+			
+			// NE block
+			if(i == 0 && j == width-1)
+				return true;
+			boolean wallsNE = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON) && (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON);
+			if(i>0 && j<width-1 && wallsNE && !goalPositions.contains(p))
+				return true;
+			
+			// SW block
+			if(i == height-1 && j == 0)
+				return true;
+			boolean wallsSW = (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON) && (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON);
+			if(i<height-1 && j>0 && wallsSW && !goalPositions.contains(p))
+				return true;
+			
+			// SE block
+			if(i == height-1 && j == width-1)
+				return true;
+			boolean wallsSE = (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON) && (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON);
+			if(i<height-1 && j<width-1 && wallsSE && !goalPositions.contains(p))
+				return true;
+		}
+		return false;
+	}
 
 	public Board movePlayer(String direction) {
 		Position futurePossiblePosition = getCoordinatesWithMoveApplied(getPlayerPosition(), direction);

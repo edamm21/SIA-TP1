@@ -33,24 +33,22 @@ public class ArtificialIntelligence {
     }
 
     private Node solveDFS(Node root) {
-    	Set<Board> checkedBoards = new HashSet<>();
-        int depth = 0;
+    	Set<Integer> checkedBoards = new HashSet<>();
         System.out.println("\nRunning solver with DFS...");
-        return solveDFSRecursively(root, checkedBoards, depth);
+        return solveDFSRecursively(root, checkedBoards, 0);
     }
 
-    private Node solveDFSRecursively(Node currentNode, Set<Board> checkedBoards, int depth) {
+    private Node solveDFSRecursively(Node currentNode, Set<Integer> checkedBoards, int depth) {
         if(currentNode.getBoard().isCompleted())
             return currentNode;
-        if(depth > maxAllowedDepth)
-        {
+        if(depth >= maxAllowedDepth)
             return null;
-        }
-        if(checkedBoards.contains(currentNode.getBoard()))
-        {
+        if(checkedBoards.contains(currentNode.getBoard().hashCode()))
         	return null;
-        }
-        checkedBoards.add(currentNode.getBoard());
+        checkedBoards.add(currentNode.getBoard().hashCode());
+        
+        if(currentNode.getBoard().isDeadlock())
+            return null;
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
         for(Board board : boardsToEvaluate) {
@@ -75,6 +73,8 @@ public class ArtificialIntelligence {
         while(!queue.isEmpty())
         {
         	currentNode = queue.poll();
+            if(currentNode.getDepth() > maxAllowedDepth)
+                return null;
         	if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
         	{
         		checkedBoards.add(currentNode.getBoard().hashCode());
@@ -83,7 +83,7 @@ public class ArtificialIntelligence {
             		solution = currentNode;
             		break;
             	}
-            	else
+            	else if(!currentNode.getBoard().isDeadlock())
             	{
             		List<Board> possibleChildren = currentNode.getBoard().getPossibleMoves();
             		Node possibleChildNode;

@@ -45,8 +45,15 @@ MUY SIMPLE:
 ##@#
 ####
 
-FACIL:
+FACIL (BFS da 11 pasos):
+######
+#  .##
+#  # #
+#  $ #
+##@  #
+######
 
+FACIL:
 ########
 ##. $ ##
 # .    #
@@ -80,7 +87,7 @@ COMPLICADO (BFS da 60 pasos):
    #   #
    #####
 
-DIFÍCIL (BFS da 78 pasos)
+DIFï¿½CIL (BFS da 78 pasos)
       ###
       #.#
   #####.#####
@@ -92,7 +99,7 @@ DIFÍCIL (BFS da 78 pasos)
 ####  ###  ####
    #### ####
    
-IMPOSIBLE (BFS da 83 pasos, tardó 22 minutos!)
+IMPOSIBLE (BFS da 83 pasos, tardï¿½ 22 minutos!)
 ############
 ##      #  #
 #  #.   #  #
