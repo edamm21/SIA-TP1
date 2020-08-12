@@ -25,6 +25,9 @@ public class ArtificialIntelligence {
             case "BFS":
             	solution = solveBFS(root);
             	break;
+            case "IDDFS":
+            	solution = solveIDDFS(root);
+            	break;
         }
     	if(solution != null)
     		printSolution(solution);
@@ -61,6 +64,54 @@ public class ArtificialIntelligence {
         return null;
     }
 
+    private Node solveIDDFS(Node root)
+    {
+    	Stack<Board> checkedBoards = new Stack<>();
+        int maxDepth = maxAllowedDepth;
+        System.out.println("\nRunning solver with IDDFS...");
+        Node solution = null;
+        maxAllowedDepth = 1;
+        while(solution == null && maxAllowedDepth <= maxDepth)
+        {
+        	System.out.println("Trying depth " +maxAllowedDepth);
+        	solution = solveIDDFSRecursively(root, checkedBoards, 0);
+        	maxAllowedDepth += 10;
+        	checkedBoards.clear();
+        }
+        maxAllowedDepth = maxDepth;
+        return solution;
+    }
+    
+    private Node solveIDDFSRecursively(Node currentNode, Stack<Board> checkedBoards, int depth) {
+        if(currentNode.getBoard().isCompleted())
+            return currentNode;
+        if(depth >= maxAllowedDepth)
+        {
+            return null;
+        }
+        if(checkedBoards.contains(currentNode.getBoard()))
+        {
+        	return null;
+        }
+        checkedBoards.push(currentNode.getBoard());
+        
+        if(currentNode.getBoard().isDeadlock())
+        {
+            return null;
+        }
+        List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
+        Node possibleChildNode = null;
+        for(Board board : boardsToEvaluate) {
+            possibleChildNode = new Node(board, depth + 1);
+            possibleChildNode.setParentNode(currentNode);
+            possibleChildNode = solveIDDFSRecursively(possibleChildNode, checkedBoards, depth + 1);
+            if(possibleChildNode != null)
+            	return possibleChildNode;
+        }
+        checkedBoards.pop();
+        return null;
+    }
+    
     private Node solveBFS(Node root)
     {
         Node solution = null;

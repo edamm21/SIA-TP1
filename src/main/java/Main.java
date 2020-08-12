@@ -30,8 +30,8 @@ public class Main {
 			return;
 		}
         Board b = new Board(initBoard);
-
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, 10000);
+        
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDDFS", 320);
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
@@ -87,7 +87,7 @@ COMPLICADO (BFS da 60 pasos):
    #   #
    #####
 
-DIF�CIL (BFS da 78 pasos)
+DIFICIL (BFS da 78 pasos)
       ###
       #.#
   #####.#####
