@@ -14,6 +14,7 @@ public class Board {
 	private int height;
 	private int width;
 	private char board[][];
+	private static Integer INFINITY = Integer.MAX_VALUE;
 	
 	private Position playerPosition;
 	private Set<Position> boxPositions;
@@ -326,8 +327,6 @@ public class Board {
 		} else {
 			return null;
 		}
-		//System.out.println("\nGOING " +direction +" IT WOULD LOOK LIKE THIS: " +futureBoard.hashCode());
-		//futureBoard.printBoard();
 		return futureBoard;
 	}
 
@@ -344,7 +343,23 @@ public class Board {
 			possibleMoves.add(currentBoard);
 		return possibleMoves;
 	}
-	
+
+	public int getManhattanDistance() {
+		if(isCompleted())
+			return 0;
+		if(isDeadlock())
+			return INFINITY;
+		int manhattanDistance = 0;
+		for(Position boxCurrentPosition : boxPositions) {
+			for(Position goalPosition : goalPositions) {
+				if(!goalPositions.contains(boxCurrentPosition)) {
+					manhattanDistance += Math.abs(boxCurrentPosition.getRow() - goalPosition.getRow()) - Math.abs(boxCurrentPosition.getCol() - goalPosition.getCol());
+				}
+			}
+		}
+		return manhattanDistance;
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{
@@ -383,5 +398,9 @@ public class Board {
 			}
 		}
 		return hashCode;
+	}
+
+	public int getHeuristicValue(String heuristicChosen) {
+		return 0;
 	}
 }

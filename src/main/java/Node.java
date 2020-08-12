@@ -1,18 +1,21 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
+public class Node implements Comparable{
 
     private Board board;
     private List<Node> childNodes;
     private Node parentNode;
-    int depth;
+    private int depth;
+    private int heuristicValue;
+    private String heuristicChosen;
 
-    public Node(Board board, int depth) {
+    public Node(Board board, int depth, String heuristicChosen) {
         this.board = board;
         this.childNodes = new ArrayList<>();
         this.parentNode = null;
         this.depth = depth;
+        this.heuristicChosen = heuristicChosen;
     }
 
     public int getDepth() {
@@ -52,5 +55,22 @@ public class Node {
         child.setParentNode(this);
     }
 
+    public int getHeuristicValue() {
+        switch (heuristicChosen) {
+            case "MANHATTAN":
+                return board.getManhattanDistance();
+            default:
+                return -1;
+        }
+    }
+
+    // For using SortedSet<Node>
+    @Override
+    public int compareTo(Object other) {
+        Node otherNode = (Node)other;
+        Integer thisHeuristic = this.getHeuristicValue() + this.getDepth();
+        Integer otherHeuristic = otherNode.getHeuristicValue() + otherNode.getDepth();
+        return otherHeuristic.compareTo(thisHeuristic);
+    }
 }
 

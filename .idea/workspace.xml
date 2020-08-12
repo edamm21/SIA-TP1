@@ -3,10 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="1e9f079e-0ab1-4d6a-8d4d-0949dceefedb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/map.conf" beforeDir="false" afterPath="$PROJECT_DIR$/map.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ArtificialIntelligence.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ArtificialIntelligence.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Node.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +46,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="DockerRegistry" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -92,15 +92,18 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="424" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596741014738">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="424" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1596741014738" />
-    <state x="773" y="231" key="#com.intellij.ide.util.MemberChooser" timestamp="1597086424442">
+    <state x="773" y="231" key="#com.intellij.ide.util.MemberChooser" timestamp="1597257224418">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="773" y="231" key="#com.intellij.ide.util.MemberChooser/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597086424442" />
+    <state x="773" y="231" key="#com.intellij.ide.util.MemberChooser/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597257224418" />
     <state x="527" y="90" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1597079153845">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -121,22 +124,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="362" key="GridCell.Tab.-1.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597085347300" />
-    <state width="1878" height="290" key="GridCell.Tab.0.bottom" timestamp="1597086303714">
+    <state width="1878" height="276" key="GridCell.Tab.0.bottom" timestamp="1597265914761">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="290" key="GridCell.Tab.0.bottom/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597086303714" />
-    <state width="1878" height="290" key="GridCell.Tab.0.center" timestamp="1597086303713">
+    <state width="1878" height="276" key="GridCell.Tab.0.bottom/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597265914761" />
+    <state width="1878" height="276" key="GridCell.Tab.0.center" timestamp="1597265914759">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="290" key="GridCell.Tab.0.center/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597086303713" />
-    <state width="1878" height="290" key="GridCell.Tab.0.left" timestamp="1597086303712">
+    <state width="1878" height="276" key="GridCell.Tab.0.center/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597265914759" />
+    <state width="1878" height="276" key="GridCell.Tab.0.left" timestamp="1597265914758">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="290" key="GridCell.Tab.0.left/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597086303712" />
-    <state width="1878" height="290" key="GridCell.Tab.0.right" timestamp="1597086303714">
+    <state width="1878" height="276" key="GridCell.Tab.0.left/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597265914758" />
+    <state width="1878" height="276" key="GridCell.Tab.0.right" timestamp="1597265914760">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="290" key="GridCell.Tab.0.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597086303714" />
+    <state width="1878" height="276" key="GridCell.Tab.0.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597265914760" />
     <state width="1878" height="362" key="GridCell.Tab.1.bottom" timestamp="1597085333792">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -153,18 +156,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="362" key="GridCell.Tab.1.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597085333791" />
-    <state x="469" y="179" key="SettingsEditor" timestamp="1596741139286">
+    <state x="548" y="400" key="Performance.Activity.Monitor" timestamp="1597245900394">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="469" y="179" key="SettingsEditor/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1596741139286" />
+    <state x="548" y="400" key="Performance.Activity.Monitor/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597245900394" />
+    <state x="469" y="179" key="SettingsEditor" timestamp="1597245951454">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="469" y="179" key="SettingsEditor/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597245951454" />
     <state x="625" y="255" width="670" height="675" key="run.anything.popup" timestamp="1596741146679">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="625" y="255" width="670" height="675" key="run.anything.popup/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1596741146679" />
-    <state x="625" y="241" width="670" height="676" key="search.everywhere.popup" timestamp="1597080747634">
+    <state x="625" y="241" width="670" height="676" key="search.everywhere.popup" timestamp="1597245918112">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="625" y="241" width="670" height="676" key="search.everywhere.popup/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597080747634" />
+    <state x="625" y="241" width="670" height="676" key="search.everywhere.popup/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597245918112" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
