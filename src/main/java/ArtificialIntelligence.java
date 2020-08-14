@@ -1,9 +1,9 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class ArtificialIntelligence {
 
@@ -18,6 +18,7 @@ public class ArtificialIntelligence {
     public void solve(Board initialBoard) {
         Node root = new Node(initialBoard, 0);
         Node solution = null;
+        long startTime = System.currentTimeMillis();
         switch (this.algorithm) {
             case "DFS":
                 solution = solveDFS(root);
@@ -30,7 +31,10 @@ public class ArtificialIntelligence {
             	break;
         }
     	if(solution != null)
-    		printSolution(solution);
+    	{
+    		long endTime = System.currentTimeMillis();
+    		printSolution(solution, endTime - startTime);
+    	}
     	else
     		System.out.println("Couldn't find a solution!");
     }
@@ -66,7 +70,7 @@ public class ArtificialIntelligence {
 
     private Node solveIDDFS(Node root)
     {
-    	Stack<Board> checkedBoards = new Stack<>();
+    	Stack<Integer> checkedBoards = new Stack<>();
         int maxDepth = maxAllowedDepth;
         System.out.println("\nRunning solver with IDDFS...");
         Node solution = null;
@@ -82,23 +86,15 @@ public class ArtificialIntelligence {
         return solution;
     }
     
-    private Node solveIDDFSRecursively(Node currentNode, Stack<Board> checkedBoards, int depth) {
+    private Node solveIDDFSRecursively(Node currentNode, Stack<Integer> checkedBoards, int depth) {
         if(currentNode.getBoard().isCompleted())
             return currentNode;
-        if(depth >= maxAllowedDepth)
+        if(depth >= maxAllowedDepth || checkedBoards.contains(currentNode.getBoard().hashCode()) || currentNode.getBoard().isDeadlock())
         {
             return null;
         }
-        if(checkedBoards.contains(currentNode.getBoard()))
-        {
-        	return null;
-        }
-        checkedBoards.push(currentNode.getBoard());
+        checkedBoards.push(currentNode.getBoard().hashCode());
         
-        if(currentNode.getBoard().isDeadlock())
-        {
-            return null;
-        }
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
         for(Board board : boardsToEvaluate) {
@@ -115,7 +111,7 @@ public class ArtificialIntelligence {
     private Node solveBFS(Node root)
     {
         Node solution = null;
-        Queue<Node> queue = new LinkedBlockingQueue<>();
+        Queue<Node> queue = new LinkedList<>();
         Set<Integer> checkedBoards = new HashSet<>();
         System.out.println("\nRunning solver with BFS...");
         
@@ -150,7 +146,7 @@ public class ArtificialIntelligence {
         return solution;
     }
     
-    private void printSolution(Node solution)
+    private void printSolution(Node solution, long elapsedTime)
     {
 		Stack<Node> path = new Stack<>();
 		Node n = solution;
@@ -167,6 +163,10 @@ public class ArtificialIntelligence {
 			System.out.println("\nMOVE " +n.getDepth() +":");
 			n.getBoard().printBoard();
 		}
+		if(elapsedTime > 60*1000)
+			System.out.println("Time elapsed to process: " + (elapsedTime / 1000.0) / 60 + " minutes");
+		else
+			System.out.println("Time elapsed to process: " + elapsedTime / 1000.0 + " seconds");
     }
 
 }

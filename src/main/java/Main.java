@@ -31,7 +31,7 @@ public class Main {
 		}
         Board b = new Board(initBoard);
         
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDDFS", 320);
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDDFS", 10000);
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
@@ -62,7 +62,7 @@ FACIL:
 ##@ #
 #####
 
-INTERMEDIO (BFS da 32 pasos):
+INTERMEDIO (BFS da 34 pasos):
   #####
 ###  .#
 #.@$  ##
