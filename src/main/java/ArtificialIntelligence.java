@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,10 +10,19 @@ public class ArtificialIntelligence {
 
     private String algorithm;
     private int maxAllowedDepth;
+    private String heuristic;
+    private static String DEFAULT_HEURISTIC = "MANHATTAN";
 
     public ArtificialIntelligence(String algorithm, int maxAllowedDepth) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = maxAllowedDepth;
+        this.heuristic = DEFAULT_HEURISTIC;
+    }
+    
+    public ArtificialIntelligence(String algorithm, int maxAllowedDepth, String heuristicChosen) {
+        this.algorithm = algorithm;
+        this.maxAllowedDepth = maxAllowedDepth;
+        this.heuristic = heuristicChosen;
     }
 
     public void solve(Board initialBoard) {
@@ -29,6 +39,9 @@ public class ArtificialIntelligence {
             case "IDDFS":
             	solution = solveIDDFS(root);
             	break;
+            case "GGS":
+                solution = solveGlobalGreedySearch(root);
+                break;
         }
     	if(solution != null)
     	{
@@ -142,6 +155,39 @@ public class ArtificialIntelligence {
                     }
             	}
         	}
+        }
+        return solution;
+    }
+    
+    private Node solveGlobalGreedySearch(Node root) {
+        Node solution = null;
+        List<Node> queue = new ArrayList<>();
+        Set<Integer> checkedBoards = new HashSet<>();
+        System.out.println("\nRunning solver with Global Greedy Search...");
+        Node currentNode;
+        queue.add(root);
+        while(!queue.isEmpty())
+        {
+            queue.sort((Node n1, Node n2) -> n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic));
+            currentNode = queue.remove(0);
+            if(currentNode.getDepth() > maxAllowedDepth)
+                return null;
+            if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
+            {
+                checkedBoards.add(currentNode.getBoard().hashCode());
+                if(currentNode.getBoard().isCompleted()){
+                    solution = currentNode;
+                    break;
+                } else if(!currentNode.getBoard().isDeadlock()) {
+                    List<Board> possibleChildren = currentNode.getBoard().getPossibleMoves();
+                    Node possibleChildNode;
+                    for(Board board : possibleChildren) {
+                        possibleChildNode = new Node(board, currentNode.getDepth() + 1);
+                        possibleChildNode.setParentNode(currentNode);
+                        queue.add(possibleChildNode);
+                    }
+                }
+            }
         }
         return solution;
     }

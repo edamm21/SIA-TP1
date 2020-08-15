@@ -11,6 +11,7 @@ public class Board {
 	private static char GOAL_ICON = '.';
 	private static char BOX_ON_GOAL_ICON = '*';
 	private static char EMPTY_ICON = ' ';
+	private static Integer INFINITY = Integer.MAX_VALUE;
 	private int height;
 	private int width;
 	private char board[][];
@@ -343,6 +344,29 @@ public class Board {
 		if(( currentBoard = this.movePlayer("RIGHT") ) != null)
 			possibleMoves.add(currentBoard);
 		return possibleMoves;
+	}
+	
+	public int getManhattanDistances()
+	{
+		if(isCompleted())
+			return 0;
+		if(isDeadlock())
+			return INFINITY;
+		int manhattanDistance = 0;
+		
+		for(Position boxCurrentPosition : boxPositions)
+		{
+			// If this box is still free, measure distance to each empty goal
+			if(!goalPositions.contains(boxCurrentPosition))
+			{
+				for(Position goalPosition : goalPositions)
+				{
+					if(!boxPositions.contains(goalPosition))
+						manhattanDistance += Math.abs(boxCurrentPosition.getRow() - goalPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - goalPosition.getCol());
+				}
+			}
+		}
+		return manhattanDistance;
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ public class Node {
     private Board board;
     private List<Node> childNodes;
     private Node parentNode;
-    int depth;
+    private int depth;
 
     public Node(Board board, int depth) {
         this.board = board;
@@ -50,6 +50,17 @@ public class Node {
     public void addChild(Node child) {
         this.childNodes.add(child);
         child.setParentNode(this);
+    }
+    
+    public int getHeuristicValue(String heuristic)
+    {
+        switch (heuristic)
+        {
+            case "MANHATTAN":
+                return board.getManhattanDistances();
+            default:
+                return -1;
+        }
     }
 
 }
