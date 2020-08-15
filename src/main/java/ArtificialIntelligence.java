@@ -1,7 +1,8 @@
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -11,17 +12,18 @@ public class ArtificialIntelligence {
     private String algorithm;
     private int maxAllowedDepth;
     private String heuristic;
+    private static int DEFAULT_DEPTH_LIMIT = 3000;
     private static String DEFAULT_HEURISTIC = "MANHATTAN";
 
-    public ArtificialIntelligence(String algorithm, int maxAllowedDepth) {
+    public ArtificialIntelligence(String algorithm) {
         this.algorithm = algorithm;
-        this.maxAllowedDepth = maxAllowedDepth;
+        this.maxAllowedDepth = DEFAULT_DEPTH_LIMIT;
         this.heuristic = DEFAULT_HEURISTIC;
     }
     
-    public ArtificialIntelligence(String algorithm, int maxAllowedDepth, String heuristicChosen) {
+    public ArtificialIntelligence(String algorithm, String heuristicChosen) {
         this.algorithm = algorithm;
-        this.maxAllowedDepth = maxAllowedDepth;
+        this.maxAllowedDepth = DEFAULT_DEPTH_LIMIT;
         this.heuristic = heuristicChosen;
     }
 
@@ -29,6 +31,7 @@ public class ArtificialIntelligence {
         Node root = new Node(initialBoard, 0);
         Node solution = null;
         long startTime = System.currentTimeMillis();
+        // TODO: Check the heuristic exists
         switch (this.algorithm) {
             case "DFS":
                 solution = solveDFS(root);
@@ -42,6 +45,12 @@ public class ArtificialIntelligence {
             case "GGS":
                 solution = solveGlobalGreedySearch(root);
                 break;
+            case "A*":
+                solution = solveAStarSearch(root);
+                break;
+            default:
+            	System.out.println("Search algorithm unknown! Quitting");
+            	return;
         }
     	if(solution != null)
     	{
@@ -161,15 +170,52 @@ public class ArtificialIntelligence {
     
     private Node solveGlobalGreedySearch(Node root) {
         Node solution = null;
-        List<Node> queue = new ArrayList<>();
+        PriorityQueue<Node> queue = new PriorityQueue<>((Node n1, Node n2) -> n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic));
         Set<Integer> checkedBoards = new HashSet<>();
         System.out.println("\nRunning solver with Global Greedy Search...");
         Node currentNode;
         queue.add(root);
         while(!queue.isEmpty())
         {
-            queue.sort((Node n1, Node n2) -> n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic));
-            currentNode = queue.remove(0);
+            currentNode = queue.poll();
+            if(currentNode.getDepth() > maxAllowedDepth)
+                return null;
+            if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
+            {
+                checkedBoards.add(currentNode.getBoard().hashCode());
+                if(currentNode.getBoard().isCompleted()){
+                    solution = currentNode;
+                    break;
+                } else if(!currentNode.getBoard().isDeadlock()) {
+                    List<Board> possibleChildren = currentNode.getBoard().getPossibleMoves();
+                    Node possibleChildNode;
+                    for(Board board : possibleChildren) {
+                        possibleChildNode = new Node(board, currentNode.getDepth() + 1);
+                        possibleChildNode.setParentNode(currentNode);
+                        queue.add(possibleChildNode);
+                    }
+                }
+            }
+        }
+        return solution;
+    }
+    
+    private Node solveAStarSearch(Node root) {
+        Node solution = null;
+        PriorityQueue<Node> queue = new PriorityQueue<>(new Comparator<Node>() {
+															@Override public int compare(Node n1, Node n2) {
+																int diff = n1.getHeuristicAndDepthValue(heuristic) - n2.getHeuristicAndDepthValue(heuristic);
+																if(diff == 0)
+																	return n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic);
+																return diff;
+															}});
+        Set<Integer> checkedBoards = new HashSet<>();
+        System.out.println("\nRunning solver with A* Search...");
+        Node currentNode;
+        queue.add(root);
+        while(!queue.isEmpty())
+        {            
+            currentNode = queue.poll();
             if(currentNode.getDepth() > maxAllowedDepth)
                 return null;
             if(!checkedBoards.contains(currentNode.getBoard().hashCode()))

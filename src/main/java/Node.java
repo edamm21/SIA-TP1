@@ -62,6 +62,12 @@ public class Node {
                 return -1;
         }
     }
-
+    
+    public int getHeuristicAndDepthValue(String heuristic)
+    {
+    	int h = getHeuristicValue(heuristic);
+    	if(h == -1)
+    		return -1;
+        return depth + getHeuristicValue(heuristic);
+    }
 }
-

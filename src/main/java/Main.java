@@ -31,7 +31,8 @@ public class Main {
 		}
         Board b = new Board(initBoard);
         
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("GGS", 7000000);
+        // Solve the challenge
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("GGDS");
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
@@ -99,6 +100,17 @@ DIFICIL (BFS da 78 pasos)
 ####  ###  ####
    #### ####
 
+DIFICIL (BFS da 83 pasos)
+############
+##      #  #
+#  #.   #  #
+#      .#  #
+##$$##@##$$##
+ #  #.      #
+ #  #   .#  #
+ #  #      ##
+ ###########
+
 DIFICIL (BFS da 93 pasos)
          ####
          #  #
@@ -115,17 +127,6 @@ DIFICIL (BFS da 93 pasos)
 #   ######    ##
 #   $.     ####
 ############
-
-IMPOSIBLE (BFS da 83 pasos, tarda 22 minutos!)
-############
-##      #  #
-#  #.   #  #
-#      .#  #
-##$$##@##$$##
- #  #.      #
- #  #   .#  #
- #  #      ##
- ###########
 */
     }
 }
