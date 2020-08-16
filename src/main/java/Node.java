@@ -1,16 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Node {
 
     private Board board;
-    private List<Node> childNodes;
     private Node parentNode;
     private int depth;
 
     public Node(Board board, int depth) {
         this.board = board;
-        this.childNodes = new ArrayList<>();
         this.parentNode = null;
         this.depth = depth;
     }
@@ -31,14 +26,6 @@ public class Node {
         this.board = board;
     }
 
-    public List<Node> getChildNodes() {
-        return childNodes;
-    }
-
-    public void setChildNodes(List<Node> childNodes) {
-        this.childNodes = childNodes;
-    }
-
     public Node getParentNode() {
         return parentNode;
     }
@@ -46,11 +33,18 @@ public class Node {
     public void setParentNode(Node parentNode) {
         this.parentNode = parentNode;
     }
-
-    public void addChild(Node child) {
-        this.childNodes.add(child);
-        child.setParentNode(this);
-    }
+    
+	public boolean isLoop()
+	{
+		Node n = this;
+		while(n.getParentNode() != null)
+		{
+			n = n.getParentNode();
+			if(n.getBoard().hashCode() == this.board.hashCode())
+				return true;
+		}
+		return false;
+	}
     
     public int getHeuristicValue(String heuristic)
     {
@@ -58,6 +52,10 @@ public class Node {
         {
             case "MANHATTAN":
                 return board.getManhattanDistances();
+            case "CLOSEST_BOX":
+            	return board.getPlayerClosestBoxDistance();
+            case "BOX_DISTANCE":
+            	return board.getPlayerBoxesDistances();
             default:
                 return -1;
         }

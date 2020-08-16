@@ -32,7 +32,7 @@ public class Main {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("GGDS");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDDFS", "MANHATTAN");
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
@@ -46,15 +46,7 @@ MUY SIMPLE:
 ##@#
 ####
 
-FACIL (BFS da 11 pasos):
-######
-#  .##
-#  # #
-#  $ #
-##@  #
-######
-
-FACIL:
+FACIL (BFS da 9 pasos):
 ########
 ##. $ ##
 # .    #
@@ -63,7 +55,25 @@ FACIL:
 ##@ #
 #####
 
-INTERMEDIO (BFS da 34 pasos):
+FACIL (BFS da 11 pasos):
+######
+#  .##
+#  # #
+#  $ #
+##@  #
+######
+
+FACIL (BFS da 20 pasos)
+##########
+#        #
+# ##$### #
+# #... # #
+#  $#$$. #
+#  * @## #
+#        #
+##########
+
+INTERMEDIO (BFS da 32 pasos):
   #####
 ###  .#
 #.@$  ##

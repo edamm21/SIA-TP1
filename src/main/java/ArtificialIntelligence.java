@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,6 +25,18 @@ public class ArtificialIntelligence {
     public ArtificialIntelligence(String algorithm, String heuristicChosen) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = DEFAULT_DEPTH_LIMIT;
+        this.heuristic = heuristicChosen;
+    }
+    
+    public ArtificialIntelligence(String algorithm, int depth) {
+        this.algorithm = algorithm;
+        this.maxAllowedDepth = depth;
+        this.heuristic = DEFAULT_HEURISTIC;
+    }
+    
+    public ArtificialIntelligence(String algorithm, int depth, String heuristicChosen) {
+        this.algorithm = algorithm;
+        this.maxAllowedDepth = depth;
         this.heuristic = heuristicChosen;
     }
 
@@ -89,44 +102,71 @@ public class ArtificialIntelligence {
         }
         return null;
     }
-
+ 
     private Node solveIDDFS(Node root)
     {
-    	Stack<Integer> checkedBoards = new Stack<>();
-        int maxDepth = maxAllowedDepth;
+    	List<Set<Integer>> checkedBoards = new ArrayList<Set<Integer>>();
+    	for(int i=0; i <= maxAllowedDepth; i++)
+    	{
+    		checkedBoards.add(new HashSet<Integer>());
+    	}
+    	Queue<Node> currentRoots = new LinkedList<>();
+    	Queue<Node> pendingNodes = new LinkedList<>();
+        int depthLimit = maxAllowedDepth;
         System.out.println("\nRunning solver with IDDFS...");
         Node solution = null;
+        Node aux = null;
         maxAllowedDepth = 1;
-        while(solution == null && maxAllowedDepth <= maxDepth)
+        currentRoots.add(root);
+		System.out.println("Trying depth " +maxAllowedDepth);
+        while(solution == null && !currentRoots.isEmpty() && maxAllowedDepth <= depthLimit)
         {
-        	System.out.println("Trying depth " +maxAllowedDepth);
-        	solution = solveIDDFSRecursively(root, checkedBoards, 0);
-        	maxAllowedDepth += 10;
-        	checkedBoards.clear();
+        	aux = currentRoots.poll();
+        	solution = solveIDDFSRecursively(aux, checkedBoards, pendingNodes, aux.getDepth());
+        	if(currentRoots.isEmpty())
+        	{
+        		currentRoots.addAll(pendingNodes);
+        		pendingNodes.clear();
+        		maxAllowedDepth += 10;
+        		System.out.println("Trying depth " +maxAllowedDepth);
+        	}
         }
-        maxAllowedDepth = maxDepth;
+        maxAllowedDepth = depthLimit;
         return solution;
     }
     
-    private Node solveIDDFSRecursively(Node currentNode, Stack<Integer> checkedBoards, int depth) {
+    private Node solveIDDFSRecursively(Node currentNode, List<Set<Integer>> checkedBoards, Queue<Node> pendingNodes, int depth)
+    {
+    	if(depth > maxAllowedDepth)
+        {
+        	pendingNodes.add(currentNode);
+            return null;
+        }
         if(currentNode.getBoard().isCompleted())
             return currentNode;
-        if(depth >= maxAllowedDepth || checkedBoards.contains(currentNode.getBoard().hashCode()) || currentNode.getBoard().isDeadlock())
+        
+        for(int i=0; i <= depth; i++)
+        {
+        	if(checkedBoards.get(i).contains(currentNode.getBoard().hashCode()))
+        	{
+        		return null;
+        	}
+        }
+        if(currentNode.getBoard().isDeadlock())
         {
             return null;
         }
-        checkedBoards.push(currentNode.getBoard().hashCode());
+        checkedBoards.get(depth).add(currentNode.getBoard().hashCode());
         
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, depth + 1);
             possibleChildNode.setParentNode(currentNode);
-            possibleChildNode = solveIDDFSRecursively(possibleChildNode, checkedBoards, depth + 1);
+            possibleChildNode = solveIDDFSRecursively(possibleChildNode, checkedBoards, pendingNodes, depth + 1);
             if(possibleChildNode != null)
             	return possibleChildNode;
         }
-        checkedBoards.pop();
         return null;
     }
     
@@ -149,8 +189,7 @@ public class ArtificialIntelligence {
         		checkedBoards.add(currentNode.getBoard().hashCode());
             	if(currentNode.getBoard().isCompleted())
             	{
-            		solution = currentNode;
-            		break;
+            		return currentNode;
             	}
             	else if(!currentNode.getBoard().isDeadlock())
             	{
@@ -165,7 +204,7 @@ public class ArtificialIntelligence {
             	}
         	}
         }
-        return solution;
+        return null;
     }
     
     private Node solveGlobalGreedySearch(Node root) {
