@@ -327,8 +327,6 @@ public class Board {
 		} else {
 			return null;
 		}
-		//System.out.println("\nGOING " +direction +" IT WOULD LOOK LIKE THIS: " +futureBoard.hashCode());
-		//futureBoard.printBoard();
 		return futureBoard;
 	}
 
