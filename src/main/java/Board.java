@@ -436,6 +436,45 @@ public class Board {
 		return manhattanDistance;
 	}
 	
+	public int getPlayerBoxesDistances()
+	{
+		if(isCompleted())
+			return 0;
+		if(isDeadlock())
+			return INFINITY;
+		int manhattanDistance = 0;
+		
+		for(Position boxCurrentPosition : boxPositions)
+		{
+			// If this box is still free, measure distance to player
+			if(!goalPositions.contains(boxCurrentPosition))
+				manhattanDistance += Math.abs(boxCurrentPosition.getRow() - playerPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - playerPosition.getCol());
+		}
+		return manhattanDistance;
+	}
+	
+	public int getPlayerClosestBoxDistance()
+	{
+		if(isCompleted())
+			return 0;
+		if(isDeadlock())
+			return INFINITY;
+		int closestDistance = INFINITY;
+		int currentDistance = 0;
+		
+		for(Position boxCurrentPosition : boxPositions)
+		{
+			// If this box is still free, measure distance to player and update min distance
+			if(!goalPositions.contains(boxCurrentPosition))
+			{
+				currentDistance = Math.abs(boxCurrentPosition.getRow() - playerPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - playerPosition.getCol());
+				if(currentDistance < closestDistance)
+					closestDistance = currentDistance;
+			}
+		}
+		return closestDistance;
+	}
+	
 	@Override
 	public boolean equals(Object o)
 	{
