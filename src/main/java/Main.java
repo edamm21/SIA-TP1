@@ -32,7 +32,7 @@ public class Main {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("BFS");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm);
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:

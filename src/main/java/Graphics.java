@@ -27,7 +27,7 @@ public class Graphics extends Application {
         int height = ArtificialIntelligence.initialBoard.getHeight();
         Pane pane = new Pane();
         if(!path.isEmpty()) {
-            final String analyticsText = "Current Move Analytics:\nCurrent depth:" + move ;
+            final String analyticsText = "Current Move Analytics:\nCurrent depth:" + move + (ArtificialIntelligence.frontierNodesPerDepth.size() > 0 ? "\nFrontier nodes: " + ArtificialIntelligence.frontierNodesPerDepth.get(move) : "\n");
             Button nextButton = new Button("Move " + (move + 1));
             nextButton.setOnAction(e -> stage.setScene(createNextScene(path.pop(), stage, move + 1)));
             Button prevButton = null;
