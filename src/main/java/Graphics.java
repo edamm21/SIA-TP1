@@ -34,7 +34,7 @@ public class Graphics extends Application {
             time = (s.getElapsedTime() / 1000.0) / 60 + " minutes";
         else
             time = s.getElapsedTime() / 1000.0 + " seconds";
-        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nSolution Heuristic: " +"???" +"\nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
+        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
         
         Button prevButton = new Button("< Prev");
         Button nextButton = new Button("Next >");
@@ -135,7 +135,7 @@ public class Graphics extends Application {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, heuristic);
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDA*", "MANHATTAN");
         Solution s = artificialIntelligence.solve(b);
         
         if(s == null)

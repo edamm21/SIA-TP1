@@ -417,21 +417,29 @@ public class Board {
 			return 0;
 		if(isDeadlock())
 			return INFINITY;
-		int manhattanDistance = 0;
+		int totalMinDistances = 0;
+		int manhattanDistance = INFINITY;
+		int aux;
 		
 		for(Position boxCurrentPosition : boxPositions)
 		{
-			// If this box is still free, measure distance to each empty goal
+			// If this box is still free, measure distance to each empty goal and keep smallest value
 			if(!goalPositions.contains(boxCurrentPosition))
 			{
+				manhattanDistance = INFINITY;
 				for(Position goalPosition : goalPositions)
 				{
 					if(!boxPositions.contains(goalPosition))
-						manhattanDistance += Math.abs(boxCurrentPosition.getRow() - goalPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - goalPosition.getCol());
+					{
+						aux = Math.abs(boxCurrentPosition.getRow() - goalPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - goalPosition.getCol());
+						if(aux < manhattanDistance)
+							manhattanDistance = aux;
+					}
 				}
+				totalMinDistances += manhattanDistance;
 			}
 		}
-		return manhattanDistance;
+		return totalMinDistances;
 	}
 	
 	public int getPlayerBoxesDistances()
