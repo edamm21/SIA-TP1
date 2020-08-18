@@ -1,8 +1,26 @@
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
 import java.util.*;
 
 public class ArtificialIntelligence {
 
     private String algorithm;
+    public static Board initialBoard;
+    public static final int TILE_SIZE = 50;
+    public static Group tileGroup = new Group();
+    public static Group pieceGroup = new Group();
+    public static Node solution = null;
+    public static long elapsedTime;
+    public static int nodesExpanded = 0;
+    public static int frontierNodes = 0;
+    public static Map<Integer, Integer> frontierNodesPerDepth = new HashMap<>();
+    public static int finalDepth;
     private int maxAllowedDepth;
     private String heuristic;
     private static int DEFAULT_DEPTH_LIMIT = 3000;
@@ -36,7 +54,8 @@ public class ArtificialIntelligence {
         this.heuristic = heuristicChosen;
     }
 
-    public void solve(Board initialBoard) {
+    public void solve(Board initialBoard) throws Exception {
+        this.initialBoard = initialBoard;
         Node root = new Node(initialBoard, 0);
         Node solution = null;
         long startTime = System.currentTimeMillis();
@@ -66,8 +85,10 @@ public class ArtificialIntelligence {
         }
     	if(solution != null)
     	{
+    	    setSolution(solution);
     		long endTime = System.currentTimeMillis();
-    		printSolution(solution, endTime - startTime);
+    		elapsedTime = endTime - startTime;
+    		printSolution(solution, elapsedTime);
     	}
     	else
     		System.out.println("Couldn't find a solution!");
@@ -79,7 +100,14 @@ public class ArtificialIntelligence {
         return solveDFSRecursively(root, checkedBoards, 0);
     }
 
+    private void setSolution(Node solution) {
+        ArtificialIntelligence.solution = solution;
+    }
+
     private Node solveDFSRecursively(Node currentNode, Set<Integer> checkedBoards, int depth) {
+        if(frontierNodes > 0)
+            frontierNodes -= 1;
+        nodesExpanded += 1;
         if(currentNode.getBoard().isCompleted())
             return currentNode;
         if(depth >= maxAllowedDepth)
@@ -92,12 +120,15 @@ public class ArtificialIntelligence {
             return null;
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
+        frontierNodes += boardsToEvaluate.size();
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, depth + 1);
             possibleChildNode.setParentNode(currentNode);
+            frontierNodesPerDepth.put(depth, frontierNodes);
             possibleChildNode = solveDFSRecursively(possibleChildNode, checkedBoards, depth + 1);
-            if(possibleChildNode != null)
+            if(possibleChildNode != null) {
             	return possibleChildNode;
+            }
         }
         return null;
     }
@@ -136,6 +167,9 @@ public class ArtificialIntelligence {
     
     private Node solveIDDFSRecursively(Node currentNode, List<Set<Integer>> checkedBoards, Queue<Node> pendingNodes, int depth)
     {
+        nodesExpanded += 1;
+        if(frontierNodes > 0)
+            frontierNodes -= 1;
     	if(depth > maxAllowedDepth)
         {
         	pendingNodes.add(currentNode);
@@ -157,12 +191,15 @@ public class ArtificialIntelligence {
         checkedBoards.get(depth).add(currentNode.getBoard().hashCode());
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
+        frontierNodes += boardsToEvaluate.size();
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, depth + 1);
             possibleChildNode.setParentNode(currentNode);
+            frontierNodesPerDepth.put(depth, frontierNodes);
             possibleChildNode = solveIDDFSRecursively(possibleChildNode, checkedBoards, pendingNodes, depth + 1);
-            if(possibleChildNode != null)
-            	return possibleChildNode;
+            if(possibleChildNode != null) {
+                return possibleChildNode;
+            }
         }
         return null;
     }
@@ -179,21 +216,21 @@ public class ArtificialIntelligence {
         while(!queue.isEmpty())
         {
         	currentNode = queue.poll();
+            nodesExpanded += 1;
             if(currentNode.getDepth() > maxAllowedDepth)
                 return null;
         	if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
         	{
         		checkedBoards.add(currentNode.getBoard().hashCode());
-            	if(currentNode.getBoard().isCompleted())
-            	{
+            	if(currentNode.getBoard().isCompleted()) {
+            	    frontierNodes = queue.size();
             		return currentNode;
             	}
             	else if(!currentNode.getBoard().isDeadlock())
             	{
             		List<Board> possibleChildren = currentNode.getBoard().getPossibleMoves();
             		Node possibleChildNode;
-                    for(Board board : possibleChildren)
-                    {
+                    for(Board board : possibleChildren) {
                     	possibleChildNode = new Node(board, currentNode.getDepth() + 1);
                     	possibleChildNode.setParentNode(currentNode);
                     	queue.add(possibleChildNode);
@@ -214,12 +251,14 @@ public class ArtificialIntelligence {
         while(!queue.isEmpty())
         {
             currentNode = queue.poll();
+            nodesExpanded += 1;
             if(currentNode.getDepth() > maxAllowedDepth)
                 return null;
             if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
             {
                 checkedBoards.add(currentNode.getBoard().hashCode());
                 if(currentNode.getBoard().isCompleted()){
+                    frontierNodes = queue.size();
                     solution = currentNode;
                     break;
                 } else if(!currentNode.getBoard().isDeadlock()) {
@@ -252,12 +291,14 @@ public class ArtificialIntelligence {
         while(!queue.isEmpty())
         {            
             currentNode = queue.poll();
+            nodesExpanded += 1;
             if(currentNode.getDepth() > maxAllowedDepth)
                 return null;
             if(!checkedBoards.contains(currentNode.getBoard().hashCode()))
             {
                 checkedBoards.add(currentNode.getBoard().hashCode());
                 if(currentNode.getBoard().isCompleted()){
+                    frontierNodes = queue.size();
                     solution = currentNode;
                     break;
                 } else if(!currentNode.getBoard().isDeadlock()) {
@@ -290,6 +331,9 @@ public class ArtificialIntelligence {
     }
 
     private Node solveIDAStarRecursively(Node currentNode, Stack<Integer> checkedBoards, int limit) {
+        if(frontierNodes > 0)
+            frontierNodes -= 1;
+        nodesExpanded += 1;
         if(currentNode.getBoard().isCompleted())
             return currentNode;
         int f = currentNode.getHeuristicAndDepthValue(heuristic);
@@ -309,38 +353,49 @@ public class ArtificialIntelligence {
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
         int currentDepth = currentNode.getDepth();
+        frontierNodes += boardsToEvaluate.size();
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, currentDepth + 1);
             possibleChildNode.setParentNode(currentNode);
+            frontierNodesPerDepth.put(currentDepth, frontierNodes);
             possibleChildNode = solveIDAStarRecursively(possibleChildNode, checkedBoards, limit);
-            if(possibleChildNode != null)
+            if(possibleChildNode != null) {
                 return possibleChildNode;
+            }
         }
         checkedBoards.pop();
         return null;
     }
 
-    private void printSolution(Node solution, long elapsedTime)
-    {
-		Stack<Node> path = new Stack<>();
-		Node n = solution;
-		while(n.getParentNode() != null)
-		{
-			path.push(n);
-			n = n.getParentNode();
-		}
-		path.push(n);
-		
-		while(!path.isEmpty())
-		{
-			n = path.pop();
-			System.out.println("\nMOVE " +n.getDepth() +":");
-			n.getBoard().printBoard();
-		}
-		if(elapsedTime > 60*1000)
-			System.out.println("Time elapsed to process: " + (elapsedTime / 1000.0) / 60 + " minutes");
-		else
-			System.out.println("Time elapsed to process: " + elapsedTime / 1000.0 + " seconds");
-    }
+    private void printSolution(Node solution, long elapsedTime) throws Exception {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
+                    javafx.application.Application.launch(Graphics.class);
+                }
+            }.start();
+            Stack<Node> path = new Stack<>();
+            Node n = solution;
+            while(n.getParentNode() != null)
+            {
+                path.push(n);
+                n = n.getParentNode();
+            }
+            path.push(n);
 
+            while(!path.isEmpty())
+            {
+                n = path.pop();
+                System.out.println("\nMOVE " +n.getDepth() +":");
+                n.getBoard().printBoard();
+            }
+            if(elapsedTime > 60*1000)
+                System.out.println("Time elapsed to process: " + (elapsedTime / 1000.0) / 60 + " minutes");
+            else
+                System.out.println("Time elapsed to process: " + elapsedTime / 1000.0 + " seconds");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

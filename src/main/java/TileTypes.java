@@ -1,5 +1,5 @@
 // official tile ASCII representation from www.game-sokoban.com
-public enum Tiles {
+public enum TileTypes {
     WALL('#'),
     FREE_SPACE(' '),
     BOX('$'),
@@ -10,7 +10,7 @@ public enum Tiles {
 
     private char symbol;
 
-    Tiles(char symbol) {
+    TileTypes(char symbol) {
         this.symbol = symbol;
     }
 

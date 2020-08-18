@@ -32,7 +32,7 @@ public class Main {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDA*");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm);
         artificialIntelligence.solve(b);
 		
 /* Ejemplos de prueba:
@@ -137,6 +137,26 @@ DIFICIL (BFS da 93 pasos)
 #   ######    ##
 #   $.     ####
 ############
+
+
+NUEVO (BFS 49)
+     #####
+    ##   #
+    #    #
+  ###    ######
+  #.# # ##    #
+### ###  ##   #
+#   #     ## ##
+#     $@      #
+#   #  $  #   #
+######   ### ##
+ #  .## #### #
+ #           #
+ ##  #########
+  ####
+
 */
+
+
     }
 }
