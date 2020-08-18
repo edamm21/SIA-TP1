@@ -37,6 +37,15 @@ public class Main {
 		
 /* Ejemplos de prueba:
 
+SIN SOLUCION
+############
+#.         #
+############
+#     #    #
+#$@        #
+############
+
+
 MUY SIMPLE:
 
 #######

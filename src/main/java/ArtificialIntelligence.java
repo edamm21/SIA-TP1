@@ -151,8 +151,7 @@ public class ArtificialIntelligence {
         {
         	aux = currentRoots.poll();
         	solution = solveIDDFSRecursively(aux, checkedBoards, pendingNodes, aux.getDepth());
-        	if(currentRoots.isEmpty())
-        	{
+        	if(currentRoots.isEmpty()) {
         		currentRoots.addAll(pendingNodes);
         		pendingNodes.clear();
         		maxAllowedDepth += 10;
@@ -315,12 +314,10 @@ public class ArtificialIntelligence {
     private Node solveIDAStarSearch(Node root) {
         System.out.println("\nRunning solver with IDA*...");
         Stack<Integer> checkedBoards = new Stack<>();
-        // Debería ser priority queue
         PriorityQueue<Integer> frontierLimits = new PriorityQueue<>();
         Node solution = null;
         int limit = 0;
-        while(solution == null)
-        {
+        while(solution == null) {
             solution = solveIDAStarRecursively(root, checkedBoards, frontierLimits, limit);
             if(frontierLimits.isEmpty())
             	return null;
@@ -337,11 +334,13 @@ public class ArtificialIntelligence {
         if(currentNode.getBoard().isCompleted())
             return currentNode;
         int f = currentNode.getHeuristicAndDepthValue(heuristic);
+
         if(f > limit) {
             if(!frontierLimits.contains(f))
                 frontierLimits.add(f);
             return null;
         }
+
         if(checkedBoards.contains(currentNode.getBoard().hashCode()))
             return null;
         
