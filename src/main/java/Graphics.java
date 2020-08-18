@@ -3,18 +3,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class Graphics extends Application {
     private List<Scene> scenes = new ArrayList<>();
@@ -35,7 +40,10 @@ public class Graphics extends Application {
         	time = new DecimalFormat("#.#####").format((s.getElapsedTime() / 1000.0) / 60) + " minutes";
         else
             time = new DecimalFormat("#.#####").format(s.getElapsedTime() / 1000.0) + " seconds";
-        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm().getCodename() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
+        String heuristicText = "N/A";
+        if(s.getHeuristic() != null)
+        	heuristicText = s.getHeuristic().toString();
+        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm().getCodename() +"\nHeuristic Used: " +heuristicText +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
         
         Button prevButton = new Button("< Prev");
         Button nextButton = new Button("Next >");
@@ -110,6 +118,51 @@ public class Graphics extends Application {
         return scene;
     }
     
+    private Scene createErrorScreen(String message)
+    {
+        GridPane pane = new GridPane();
+        //pane.setPrefSize(400, 200);
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(50));
+        
+        
+        Text text = new Text();
+        text.setText(message);
+        
+        pane.getChildren().addAll(text);
+        Scene scene = new Scene(pane);
+        return scene;
+    }
+    
+    private void launchErrorScreen(String message, Stage stage)
+    {
+        Scene scene = createErrorScreen(message);
+        stage.setTitle("Sokoban Solver");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    private void printSolution(Solution s) throws Exception {
+        Iterator<Node> it = s.getMoves().iterator();
+        Node n;
+        while(it.hasNext())
+        {
+        	n = it.next();
+            System.out.println("\nMOVE " +n.getDepth() +":");
+            n.getBoard().printBoard();
+        }
+        System.out.println("\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm().getCodename());
+        if(s.getHeuristic() != null)
+        	System.out.println("Heuristic Used: " +s.getHeuristic());
+        else
+        	System.out.println("Heuristic Used: N/A");
+        if(s.getElapsedTime() > 60*1000)
+            System.out.println("Elapsed Time: " + (s.getElapsedTime() / 1000.0) / 60 + " minutes");
+        else
+            System.out.println("Elapsed Time: " + s.getElapsedTime() / 1000.0 + " seconds");
+       System.out.println("Solution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded());
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -123,7 +176,6 @@ public class Graphics extends Application {
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("Algorithm: " +readAlgorithm +"\nHeuristic: " +readHeuristic);
 		Algorithm algorithm = null;
 		Heuristic heuristic = null;
 		for(Algorithm a : Algorithm.values())
@@ -139,11 +191,13 @@ public class Graphics extends Application {
 		if(algorithm == null)
 		{
 			System.out.println("Algorithm " +readAlgorithm +" unknown!");
+			launchErrorScreen("ERROR\nAlgorithm " +readAlgorithm +" unknown!", primaryStage);
 			return;
 		}
 		if(heuristic == null)
 		{
 			System.out.println("Heuristic " +readHeuristic +" unknown!");
+			launchErrorScreen("ERROR\nHeuristic " +readHeuristic +" unknown!", primaryStage);
 			return;
 		}
         
@@ -159,10 +213,13 @@ public class Graphics extends Application {
         
         // Solve the challenge
         ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, heuristic);
+        System.out.println("Solving map. Please wait...");
         Solution s = artificialIntelligence.solve(b);
         
         if(s == null)
         {
+        	System.out.println("Couldn't find a solution for the requested map!");
+        	launchErrorScreen("Couldn't find a solution for the requested map!", primaryStage);
         	return;
         }
         
@@ -171,6 +228,7 @@ public class Graphics extends Application {
         primaryStage.setTitle("Sokoban Solver");
         primaryStage.setScene(scene);
         primaryStage.show();
+        printSolution(s);
     }
 
     private Piece makePlayer(TileTypes tileType, int x, int y) {

@@ -17,7 +17,7 @@ public class ArtificialIntelligence {
     private int maxAllowedDepth;
     private int nodesExpanded = 0;
     private int frontierNodes = 0;
-    private int DEFAULT_DEPTH_LIMIT = 5000;
+    private int DEFAULT_DEPTH_LIMIT = 8000;
     private Heuristic DEFAULT_HEURISTIC = Heuristic.BOXES_REMAINING;
 
 
@@ -75,6 +75,17 @@ public class ArtificialIntelligence {
             	System.out.println("Search algorithm unknown! Quitting");
             	return null;
         }
+        switch (this.heuristic) {
+	        case CLOSEST_GOAL:
+	            break;
+	        case CLOSEST_BOX:
+	        	break;
+	        case BOXES_REMAINING:
+	        	break;
+	        default:
+	        	System.out.println("Heuristic type unknown! Quitting");
+	        	return null;
+	    }
     	if(solution != null)
     	{
     		long endTime = System.currentTimeMillis();
@@ -87,19 +98,12 @@ public class ArtificialIntelligence {
                 n = n.getParentNode();
             }
             path.add(0, n);
-            Solution s = new Solution(path, elapsedTime, nodesExpanded, frontierNodes, algorithm, heuristic);
-            printSolution(s);
-            return s;
+            return new Solution(path, elapsedTime, nodesExpanded, frontierNodes, algorithm, heuristic);
     	}
-    	else
-    	{
-    		System.out.println("Couldn't find a solution!");
-    		return null;
-    	}
+    	return null;
     }
 
     private Node solveDFS(Node root) {
-        System.out.println("\nRunning solver with DFS...");
         Set<Integer> checkedBoards = new HashSet<>();
         return solveDFSRecursively(root, checkedBoards, 0);
     }
@@ -142,7 +146,6 @@ public class ArtificialIntelligence {
     	Queue<Node> currentRoots = new LinkedList<>();
     	Queue<Node> pendingNodes = new LinkedList<>();
         int depthLimit = maxAllowedDepth;
-        System.out.println("\nRunning solver with IDDFS...");
         Node solution = null;
         Node aux = null;
         maxAllowedDepth = 1;
@@ -203,7 +206,6 @@ public class ArtificialIntelligence {
     
     private Node solveBFS(Node root)
     {
-        System.out.println("\nRunning solver with BFS...");
         Queue<Node> queue = new LinkedList<>();
         Set<Integer> checkedBoards = new HashSet<>();
 
@@ -241,7 +243,6 @@ public class ArtificialIntelligence {
         Node solution = null;
         PriorityQueue<Node> queue = new PriorityQueue<>((Node n1, Node n2) -> n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic));
         Set<Integer> checkedBoards = new HashSet<>();
-        System.out.println("\nRunning solver with Global Greedy Search...");
         Node currentNode;
         queue.add(root);
         while(!queue.isEmpty())
@@ -272,7 +273,6 @@ public class ArtificialIntelligence {
     }
     
     private Node solveAStarSearch(Node root) {
-        System.out.println("\nRunning solver with A* Search...");
         Node solution = null;
         PriorityQueue<Node> queue = new PriorityQueue<>(new Comparator<Node>() {
 															@Override public int compare(Node n1, Node n2) {
@@ -312,7 +312,6 @@ public class ArtificialIntelligence {
     }
 
     private Node solveIDAStarSearch(Node root) {
-        System.out.println("\nRunning solver with IDA*...");
         Stack<Integer> checkedBoards = new Stack<>();
         PriorityQueue<Integer> frontierLimits = new PriorityQueue<>();
         Node solution = null;
@@ -365,18 +364,4 @@ public class ArtificialIntelligence {
         return null;
     }
 
-    private void printSolution(Solution sol) throws Exception {
-        Iterator<Node> it = sol.getMoves().iterator();
-        Node n;
-        while(it.hasNext())
-        {
-        	n = it.next();
-            System.out.println("\nMOVE " +n.getDepth());
-            n.getBoard().printBoard();
-        }
-        if(sol.getElapsedTime() > 60*1000)
-            System.out.println("Time elapsed to process: " + (sol.getElapsedTime() / 1000.0) / 60 + " minutes");
-        else
-            System.out.println("Time elapsed to process: " + sol.getElapsedTime() / 1000.0 + " seconds");
-    }
 }

@@ -15,7 +15,30 @@ public class Solution {
     	this.nodesExpanded = nodesExpanded;
     	this.frontierSize = frontierSize;
     	this.algorithm = algorithm;
-    	this.heuristic = heuristic;
+    	switch(algorithm)
+    	{
+	        case DFS:
+	        	this.heuristic = null;
+	            break;
+	        case BFS:
+	        	this.heuristic = null;
+	        	break;
+	        case IDDFS:
+	        	this.heuristic = null;
+	        	break;
+	        default:
+	        	this.heuristic = heuristic;
+	        	break;
+    	}
+    }
+    
+    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, Algorithm algorithm)
+    {
+    	this.moves = moves;
+    	this.elapsedTime = time;
+    	this.nodesExpanded = nodesExpanded;
+    	this.frontierSize = frontierSize;
+    	this.algorithm = algorithm;
     }
 
 	public List<Node> getMoves() {
