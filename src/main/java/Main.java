@@ -83,6 +83,14 @@ INTERMEDIO (BFS da 32 pasos):
 #       #
 #########
 
+INTERMEDIO (BFS da 35 pasos)
+ #########
+##       #
+# $##### ##
+# @  .#   #
+#.  $.$   #
+###########
+
 COMPLICADO (BFS da 60 pasos):
      #####
      #   #
