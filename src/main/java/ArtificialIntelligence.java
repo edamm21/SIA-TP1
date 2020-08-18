@@ -12,34 +12,34 @@ import java.util.Set;
 import java.util.Stack;
 
 public class ArtificialIntelligence {
-    private String algorithm;
-    private String heuristic;
+    private Algorithm algorithm;
+    private Heuristic heuristic;
     private int maxAllowedDepth;
     private int nodesExpanded = 0;
     private int frontierNodes = 0;
-    private static int DEFAULT_DEPTH_LIMIT = 3000;
-    private static String DEFAULT_HEURISTIC = "MANHATTAN";
+    private int DEFAULT_DEPTH_LIMIT = 5000;
+    private Heuristic DEFAULT_HEURISTIC = Heuristic.BOXES_REMAINING;
 
 
-    public ArtificialIntelligence(String algorithm) {
+    public ArtificialIntelligence(Algorithm algorithm) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = DEFAULT_DEPTH_LIMIT;
         this.heuristic = DEFAULT_HEURISTIC;
     }
     
-    public ArtificialIntelligence(String algorithm, String heuristicChosen) {
+    public ArtificialIntelligence(Algorithm algorithm, Heuristic heuristicChosen) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = DEFAULT_DEPTH_LIMIT;
         this.heuristic = heuristicChosen;
     }
     
-    public ArtificialIntelligence(String algorithm, int depth) {
+    public ArtificialIntelligence(Algorithm algorithm, int depth) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = depth;
         this.heuristic = DEFAULT_HEURISTIC;
     }
     
-    public ArtificialIntelligence(String algorithm, int depth, String heuristicChosen) {
+    public ArtificialIntelligence(Algorithm algorithm, int depth, Heuristic heuristicChosen) {
         this.algorithm = algorithm;
         this.maxAllowedDepth = depth;
         this.heuristic = heuristicChosen;
@@ -53,22 +53,22 @@ public class ArtificialIntelligence {
         frontierNodes = 0;
         // TODO: Check the heuristic exists
         switch (this.algorithm) {
-            case "DFS":
+            case DFS:
                 solution = solveDFS(root);
                 break;
-            case "BFS":
+            case BFS:
             	solution = solveBFS(root);
             	break;
-            case "IDDFS":
+            case IDDFS:
             	solution = solveIDDFS(root);
             	break;
-            case "GGS":
+            case GGS:
                 solution = solveGlobalGreedySearch(root);
                 break;
-            case "A*":
+            case A_STAR:
                 solution = solveAStarSearch(root);
                 break;
-            case "IDA*":
+            case IDA_STAR:
                 solution = solveIDAStarSearch(root);
                 break;
             default:

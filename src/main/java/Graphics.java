@@ -35,7 +35,7 @@ public class Graphics extends Application {
         	time = new DecimalFormat("#.#####").format((s.getElapsedTime() / 1000.0) / 60) + " minutes";
         else
             time = new DecimalFormat("#.#####").format(s.getElapsedTime() / 1000.0) + " seconds";
-        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
+        final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm().getCodename() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
         
         Button prevButton = new Button("< Prev");
         Button nextButton = new Button("Next >");
@@ -113,17 +113,39 @@ public class Graphics extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        String algorithm;
-        String heuristic;
+        String readAlgorithm;
+        String readHeuristic;
 		try {
 			List<String> configurations = Files.readAllLines(Paths.get("settings.conf"));
-			algorithm = configurations.get(0);
-			heuristic = configurations.get(1);
+			readAlgorithm = configurations.get(0);
+			readHeuristic = configurations.get(1);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("Algorithm: " +algorithm +"\nHeuristic: " +heuristic);
+		System.out.println("Algorithm: " +readAlgorithm +"\nHeuristic: " +readHeuristic);
+		Algorithm algorithm = null;
+		Heuristic heuristic = null;
+		for(Algorithm a : Algorithm.values())
+		{
+			if(a.getCodename().equals(readAlgorithm))
+				algorithm = a;
+		}
+		for(Heuristic h : Heuristic.values())
+		{
+			if(h.getCodename().equals(readHeuristic))
+				heuristic = h;
+		}
+		if(algorithm == null)
+		{
+			System.out.println("Algorithm " +readAlgorithm +" unknown!");
+			return;
+		}
+		if(heuristic == null)
+		{
+			System.out.println("Heuristic " +readHeuristic +" unknown!");
+			return;
+		}
         
     	// Read initial board file
         String initBoard;
@@ -136,7 +158,7 @@ public class Graphics extends Application {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("A*", "BOXES_REMAINING");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, heuristic);
         Solution s = artificialIntelligence.solve(b);
         
         if(s == null)

@@ -8,32 +8,9 @@ public class Main {
 	
     public static void main(String[] args) throws Exception
     {	
-		// Read config file
-        String algorithm;
-        String heuristic;
-		try {
-			List<String> configurations = Files.readAllLines(Paths.get("settings.conf"));
-			algorithm = configurations.get(0);
-			heuristic = configurations.get(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		System.out.println("Algorithm: " +algorithm +"\nHeuristic: " +heuristic);
-        
-    	// Read initial board file
-        String initBoard;
-		try {
-			initBoard = String.join("\n", Files.readAllLines(Paths.get("map.conf")));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-        Board b = new Board(initBoard);
-        
-        // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm);
-        artificialIntelligence.solve(b);
+		System.out.println("Run from Graphics, Delete Main!");
+    }
+}
 		
 /* Ejemplos de prueba:
 
@@ -173,7 +150,3 @@ NUEVO (BFS 49)
   ####
 
 */
-
-
-    }
-}

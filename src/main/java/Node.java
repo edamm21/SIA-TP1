@@ -46,22 +46,22 @@ public class Node {
 		return false;
 	}
     
-    public int getHeuristicValue(String heuristic)
+    public int getHeuristicValue(Heuristic heuristic)
     {
         switch (heuristic)
         {
-            case "MANHATTAN":
+            case CLOSEST_GOAL:
                 return board.getManhattanDistances();
-            case "CLOSEST_BOX":
+            case CLOSEST_BOX:
             	return board.getPlayerClosestBoxDistance();
-            case "BOXES_REMAINING":
+            case BOXES_REMAINING:
             	return board.getRemainingBoxes();
             default:
                 return -1;
         }
     }
     
-    public int getHeuristicAndDepthValue(String heuristic)
+    public int getHeuristicAndDepthValue(Heuristic heuristic)
     {
     	int h = getHeuristicValue(heuristic);
     	if(h == -1)

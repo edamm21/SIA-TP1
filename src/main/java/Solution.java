@@ -5,10 +5,10 @@ public class Solution {
 	private long elapsedTime;
     private int nodesExpanded;
     private int frontierSize;
-    private String algorithm;
-    private String heuristic;
+    private Algorithm algorithm;
+    private Heuristic heuristic;
     
-    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, String algorithm, String heuristic)
+    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, Algorithm algorithm, Heuristic heuristic)
     {
     	this.moves = moves;
     	this.elapsedTime = time;
@@ -50,19 +50,19 @@ public class Solution {
 		this.frontierSize = frontierSize;
 	}
 
-	public String getHeuristic() {
+	public Heuristic getHeuristic() {
 		return heuristic;
 	}
 
-	public void setHeuristic(String heuristic) {
+	public void setHeuristic(Heuristic heuristic) {
 		this.heuristic = heuristic;
 	}
 
-	public String getAlgorithm() {
+	public Algorithm getAlgorithm() {
 		return algorithm;
 	}
 
-	public void setAlgorithm(String algorithm) {
+	public void setAlgorithm(Algorithm algorithm) {
 		this.algorithm = algorithm;
 	}
 }
