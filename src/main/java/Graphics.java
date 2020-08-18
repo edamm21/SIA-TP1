@@ -136,7 +136,7 @@ public class Graphics extends Application {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("A*", "BOXES_REMAINING");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, heuristic);
         Solution s = artificialIntelligence.solve(b);
         
         if(s == null)

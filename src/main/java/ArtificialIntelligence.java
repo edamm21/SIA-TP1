@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 
 public class ArtificialIntelligence {
     private String algorithm;
@@ -69,7 +68,8 @@ public class ArtificialIntelligence {
                 solution = solveAStarSearch(root);
                 break;
             case "IDA*":
-                solution = solveIDAStarSearch(root);
+                //solution = solveIDAStarSearch(root);
+                solution = solveIDAStar(root);
                 break;
             default:
             	System.out.println("Search algorithm unknown! Quitting");
@@ -311,23 +311,88 @@ public class ArtificialIntelligence {
         return solution;
     }
 
-    private Node solveIDAStarSearch(Node root) {
+    private Node solveIDAStar(Node root) {
         System.out.println("\nRunning solver with IDA*...");
-        Stack<Integer> checkedBoards = new Stack<>();
-        PriorityQueue<Integer> frontierLimits = new PriorityQueue<>();
+        Comparator<Node> comparator = (n1, n2) -> {
+            int diff = n1.getHeuristicAndDepthValue(heuristic) - n2.getHeuristicAndDepthValue(heuristic);
+            if(diff == 0)
+                return n1.getHeuristicValue(heuristic) - n2.getHeuristicValue(heuristic);
+            return diff;
+        };
+        PriorityQueue<Node> queue = new PriorityQueue<>(comparator);
+        PriorityQueue<Node> allowedNodes = new PriorityQueue<>(comparator);
+        Set<Integer> checkedBoards = new HashSet<>();
+        Node currentNode;
         Node solution = null;
-        int limit = 0;
-        while(solution == null) {
-            solution = solveIDAStarRecursively(root, checkedBoards, frontierLimits, limit);
-            if(frontierLimits.isEmpty())
-            	return null;
-            limit = frontierLimits.poll();
-            checkedBoards.clear();
+        Node lastFromQueue;
+        int limit = root.getHeuristicAndDepthValue(heuristic);
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            lastFromQueue = queue.poll();
+            allowedNodes.add(lastFromQueue);
+            limit = lastFromQueue.getHeuristicAndDepthValue(heuristic);
+            while(!allowedNodes.isEmpty()) {
+                currentNode = allowedNodes.poll();
+                frontierNodes = queue.size();
+                if(currentNode.getDepth() > maxAllowedDepth)
+                    return null;
+                if (!checkedBoards.contains(currentNode.getBoard().hashCode())) {
+                    checkedBoards.add(currentNode.getBoard().hashCode());
+                    if (currentNode.getBoard().isCompleted()) {
+                        solution = currentNode;
+                        break;
+                    } else if (!currentNode.getBoard().isDeadlock()) {
+                        nodesExpanded++;
+                        List<Board> possibleChildren = currentNode.getBoard().getPossibleMoves();
+                        Node possibleChildNode;
+                        for (Board board : possibleChildren) {
+                            possibleChildNode = new Node(board, currentNode.getDepth() + 1);
+                            possibleChildNode.setParentNode(currentNode);
+                            int f = possibleChildNode.getHeuristicAndDepthValue(heuristic);
+                            if(f >= 0) { // avoid adding deadlocked nodes
+                                if (f > limit)
+                                    queue.add(possibleChildNode);
+                                else
+                                    allowedNodes.add(possibleChildNode);
+                            }
+                        }
+                    }
+                }
+            }
         }
         return solution;
     }
 
-    private Node solveIDAStarRecursively(Node currentNode, Stack<Integer> checkedBoards, PriorityQueue<Integer> frontierLimits, int limit)
+    private Node solveIDAStarSearch(Node root) {
+        System.out.println("\nRunning solver with IDA*...");
+        PriorityQueue<Integer> frontierLimits = new PriorityQueue<>();
+        Queue<Node> pendingNodes = new LinkedList<>();
+        Queue<Node> currentRoots = new LinkedList<>();
+        //Stack<Integer> checkedBoards = new Stack<>();
+        //List<Set<Integer>> checkedBoards = new ArrayList<>();
+        Map<Integer, Set<Integer>> checkedBoardsByF = new HashMap<>();
+        Node solution = null;
+        Node aux = null;
+        int limit = 0;
+        currentRoots.add(root);
+        int count = 0;
+        while(solution == null && !currentRoots.isEmpty()) {
+            aux = currentRoots.poll();
+            solution = solveIDAStarRecursively(aux, checkedBoardsByF, frontierLimits, limit, pendingNodes);
+            if(frontierLimits.isEmpty())
+                return null;
+            if(currentRoots.isEmpty()) {
+                currentRoots.addAll(pendingNodes);
+                pendingNodes.clear();
+            }
+            limit = frontierLimits.poll();
+            checkedBoardsByF.clear();
+        }
+        return solution;
+    }
+
+    //private Node solveIDAStarRecursively(Node currentNode, Stack<Integer> checkedBoards, PriorityQueue<Integer> frontierLimits, int limit, Queue<Node> pendingNodes)
+    private Node solveIDAStarRecursively(Node currentNode, Map<Integer, Set<Integer>> checkedBoards, PriorityQueue<Integer> frontierLimits, int limit, Queue<Node> pendingNodes)
     {
         if(frontierNodes > 0)
             frontierNodes--;
@@ -336,15 +401,26 @@ public class ArtificialIntelligence {
         int f = currentNode.getHeuristicAndDepthValue(heuristic);
 
         if(f > limit) {
+            pendingNodes.add(currentNode);
             if(!frontierLimits.contains(f))
                 frontierLimits.add(f);
             return null;
         }
 
-        if(checkedBoards.contains(currentNode.getBoard().hashCode()))
-            return null;
+        //if(checkedBoards.contains(currentNode.getBoard().hashCode()))
+        //    return null;
         
-        checkedBoards.push(currentNode.getBoard().hashCode());
+        //checkedBoards.push(currentNode.getBoard().hashCode());
+
+        if(!checkedBoards.containsKey(f)) {
+            checkedBoards.put(f, new HashSet<>());
+        } else {
+            if(checkedBoards.get(f).contains(currentNode.getBoard().hashCode()))
+                return null;
+        }
+
+        checkedBoards.get(f).add(currentNode.getBoard().hashCode());
+
         if(currentNode.getBoard().isDeadlock())
         	return null;
         
@@ -356,12 +432,12 @@ public class ArtificialIntelligence {
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, currentDepth + 1);
             possibleChildNode.setParentNode(currentNode);
-            possibleChildNode = solveIDAStarRecursively(possibleChildNode, checkedBoards, frontierLimits, limit);
+            possibleChildNode = solveIDAStarRecursively(possibleChildNode, checkedBoards, frontierLimits, limit, pendingNodes);
             if(possibleChildNode != null) {
                 return possibleChildNode;
             }
         }
-        checkedBoards.pop();
+        checkedBoards.get(f).remove(currentNode.getBoard().hashCode());
         return null;
     }
 
