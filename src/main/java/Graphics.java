@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -31,9 +32,9 @@ public class Graphics extends Application {
         // Information
     	String time;
         if(s.getElapsedTime() > 60*1000)
-            time = (s.getElapsedTime() / 1000.0) / 60 + " minutes";
+        	time = new DecimalFormat("#.#####").format((s.getElapsedTime() / 1000.0) / 60) + " minutes";
         else
-            time = s.getElapsedTime() / 1000.0 + " seconds";
+            time = new DecimalFormat("#.#####").format(s.getElapsedTime() / 1000.0) + " seconds";
         final String analyticsText = "MOVE " +move +" / " +(s.getMoves().size()-1) +"\n\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm() +"\nHeuristic Used: " +s.getHeuristic() +"\nElapsed Time: " +time +"\nSolution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded();
         
         Button prevButton = new Button("< Prev");
@@ -135,7 +136,7 @@ public class Graphics extends Application {
         Board b = new Board(initBoard);
         
         // Solve the challenge
-        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("IDA*", "MANHATTAN");
+        ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence("A*", "BOXES_REMAINING");
         Solution s = artificialIntelligence.solve(b);
         
         if(s == null)

@@ -371,7 +371,7 @@ public class ArtificialIntelligence {
         while(it.hasNext())
         {
         	n = it.next();
-            System.out.println("\nMOVE " +n.getDepth() +":");
+            System.out.println("\nMOVE " +n.getDepth());
             n.getBoard().printBoard();
         }
         if(sol.getElapsedTime() > 60*1000)

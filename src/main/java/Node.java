@@ -54,8 +54,8 @@ public class Node {
                 return board.getManhattanDistances();
             case "CLOSEST_BOX":
             	return board.getPlayerClosestBoxDistance();
-            case "BOX_DISTANCE":
-            	return board.getPlayerBoxesDistances();
+            case "BOXES_REMAINING":
+            	return board.getRemainingBoxes();
             default:
                 return -1;
         }

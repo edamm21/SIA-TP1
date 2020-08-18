@@ -309,70 +309,9 @@ public class Board {
 	
 	public boolean isDeadlock()
 	{
-		int i, j;
 		for(Position p : boxPositions)
 		{
 			if(isCornered(p))
-				return true;
-			
-			i = p.getRow();
-			j = p.getCol();
-			boolean walls;
-			
-			// Wall UP, Box LEFT
-			if(i == 0 && j == 0)
-				return true;
-			walls = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i, j-1)))
-				return true;
-			
-			// Wall UP, Box RIGHT
-			if(i == 0 && j == width-1)
-				return true;
-			walls = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i, j+1)))
-				return true;
-			
-			// Wall LEFT, Box UP
-			if(i == 0 && j == 0)
-				return true;
-			walls = (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i-1, j)))
-				return true;
-			
-			// Wall LEFT, Box DOWN
-			if(i == height-1 && j == 0)
-				return true;
-			walls = (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i+1, j)))
-				return true;
-			
-			// Wall RIGHT, Box UP
-			if(i == 0 && j == width-1)
-				return true;
-			walls = (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i-1, j)))
-				return true;
-			
-			// Wall RIGHT, Box DOWN
-			if(i == height-1 && j == width-1)
-				return true;
-			walls = (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i+1, j)))
-				return true;
-			
-			// Wall DOWN, Box LEFT
-			if(i == height-1 && j == 0)
-				return true;
-			walls = (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i, j-1)))
-				return true;
-			
-			// Wall DOWN, Box RIGHT
-			if(i == height-1 && j == width-1)
-				return true;
-			walls = (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
-			if(walls && isCornered(new Position(i, j+1)))
 				return true;
 		}
 		return false;
@@ -442,21 +381,19 @@ public class Board {
 		return totalMinDistances;
 	}
 	
-	public int getPlayerBoxesDistances()
+	public int getRemainingBoxes()
 	{
 		if(isCompleted())
 			return 0;
 		if(isDeadlock())
 			return INFINITY;
-		int manhattanDistance = 0;
-		
-		for(Position boxCurrentPosition : boxPositions)
+		int boxesRemaining = 0;
+		for(Position p : boxPositions)
 		{
-			// If this box is still free, measure distance to player
-			if(!goalPositions.contains(boxCurrentPosition))
-				manhattanDistance += Math.abs(boxCurrentPosition.getRow() - playerPosition.getRow()) + Math.abs(boxCurrentPosition.getCol() - playerPosition.getCol());
+			if(!goalPositions.contains(p))
+				boxesRemaining++;
 		}
-		return manhattanDistance;
+		return boxesRemaining;
 	}
 	
 	public int getPlayerClosestBoxDistance()
