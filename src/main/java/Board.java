@@ -322,56 +322,56 @@ public class Board {
 			// Wall UP, Box LEFT
 			if(i == 0 && j == 0)
 				return true;
-			walls = (board[i-1][j] == WALL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
+			walls = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i, j-1)))
 				return true;
 			
 			// Wall UP, Box RIGHT
 			if(i == 0 && j == width-1)
 				return true;
-			walls = (board[i-1][j] == WALL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
+			walls = (board[i-1][j] == WALL_ICON || board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i, j+1)))
 				return true;
 			
 			// Wall LEFT, Box UP
 			if(i == 0 && j == 0)
 				return true;
-			walls = (board[i][j-1] == WALL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
+			walls = (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i-1, j)))
 				return true;
 			
 			// Wall LEFT, Box DOWN
 			if(i == height-1 && j == 0)
 				return true;
-			walls = (board[i][j-1] == WALL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
+			walls = (board[i][j-1] == WALL_ICON || board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i+1, j)))
 				return true;
 			
 			// Wall RIGHT, Box UP
 			if(i == 0 && j == width-1)
 				return true;
-			walls = (board[i][j+1] == WALL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
+			walls = (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON) && (board[i-1][j] == BOX_ICON || board[i-1][j] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i-1, j)))
 				return true;
 			
 			// Wall RIGHT, Box DOWN
 			if(i == height-1 && j == width-1)
 				return true;
-			walls = (board[i][j+1] == WALL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
+			walls = (board[i][j+1] == WALL_ICON || board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON) && (board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i+1, j)))
 				return true;
 			
 			// Wall DOWN, Box LEFT
 			if(i == height-1 && j == 0)
 				return true;
-			walls = (board[i+1][j] == WALL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
+			walls = (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON) && (board[i][j-1] == BOX_ICON || board[i][j-1] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i, j-1)))
 				return true;
 			
 			// Wall DOWN, Box RIGHT
 			if(i == height-1 && j == width-1)
 				return true;
-			walls = (board[i+1][j] == WALL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
+			walls = (board[i+1][j] == WALL_ICON || board[i+1][j] == BOX_ICON || board[i+1][j] == BOX_ON_GOAL_ICON) && (board[i][j+1] == BOX_ICON || board[i][j+1] == BOX_ON_GOAL_ICON);
 			if(walls && isCornered(new Position(i, j+1)))
 				return true;
 		}
