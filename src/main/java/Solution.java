@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Solution {
@@ -7,13 +8,18 @@ public class Solution {
     private int frontierSize;
     private Algorithm algorithm;
     private Heuristic heuristic;
+    private boolean solved;
     
-    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, Algorithm algorithm, Heuristic heuristic)
+    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, Algorithm algorithm, Heuristic heuristic, boolean solved)
     {
-    	this.moves = moves;
+    	if(moves == null)
+    		this.moves = new ArrayList<>();
+    	else
+    		this.moves = moves;
     	this.elapsedTime = time;
     	this.nodesExpanded = nodesExpanded;
     	this.frontierSize = frontierSize;
+    	this.solved = solved;
     	this.algorithm = algorithm;
     	switch(algorithm)
     	{
@@ -30,15 +36,6 @@ public class Solution {
 	        	this.heuristic = heuristic;
 	        	break;
     	}
-    }
-    
-    public Solution(List<Node> moves, long time, int nodesExpanded, int frontierSize, Algorithm algorithm)
-    {
-    	this.moves = moves;
-    	this.elapsedTime = time;
-    	this.nodesExpanded = nodesExpanded;
-    	this.frontierSize = frontierSize;
-    	this.algorithm = algorithm;
     }
 
 	public List<Node> getMoves() {
@@ -87,5 +84,9 @@ public class Solution {
 
 	public void setAlgorithm(Algorithm algorithm) {
 		this.algorithm = algorithm;
+	}
+
+	public boolean isSolved() {
+		return solved;
 	}
 }

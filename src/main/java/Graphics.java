@@ -142,16 +142,58 @@ public class Graphics extends Application {
         stage.show();
     }
     
-    private void printSolution(Solution s) throws Exception {
-        Iterator<Node> it = s.getMoves().iterator();
-        Node n;
-        while(it.hasNext())
+    private String getSolutionAnalysis(Solution s)
+    {
+    	String resp = "";
+        if(s.isSolved())
         {
-        	n = it.next();
-            System.out.println("\nMOVE " +n.getDepth() +":");
-            n.getBoard().printBoard();
+            Iterator<Node> it = s.getMoves().iterator();
+            Node n;
+            while(it.hasNext())
+            {
+            	n = it.next();
+                resp += "\nMOVE " +n.getDepth() +":";
+                resp += n.getBoard().toString();
+            }
+            resp += "\n**SOLUTION INFORMATION**\n\n";
         }
-        System.out.println("\n**SOLUTION INFORMATION**\n\nSearch Algorithm Used: " +s.getAlgorithm().getCodename());
+        else
+        	resp += "\n**NO SOLUTION FOUND**\n\n";
+
+        resp += "Search Algorithm Used: " +s.getAlgorithm().getCodename() +"\n";
+        if(s.getHeuristic() != null)
+        	resp += "Heuristic Used: " +s.getHeuristic() +"\n";
+        else
+        	resp += "Heuristic Used: N/A\n";
+        if(s.getElapsedTime() > 60*1000)
+        	resp += "Elapsed Time: " + (s.getElapsedTime() / 1000.0) / 60 + " minutes\n";
+        else
+        	resp += "Elapsed Time: " + s.getElapsedTime() / 1000.0 + " seconds\n";
+        
+        if(s.isSolved())
+        	resp += "Solution Depth: " +(s.getMoves().size()-1) +"moves\n";
+        resp += "Remaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded() +"\n";
+        return resp;
+    }
+    
+    private void printSolution(Solution s) throws Exception
+    {
+        if(s.isSolved())
+        {
+            Iterator<Node> it = s.getMoves().iterator();
+            Node n;
+            while(it.hasNext())
+            {
+            	n = it.next();
+                System.out.println("\nMOVE " +n.getDepth() +":");
+                n.getBoard().printBoard();
+            }
+            System.out.println("\n**SOLUTION INFORMATION**\n");
+        }
+        else
+        	System.out.println("\n**NO SOLUTION FOUND**\n");
+
+        System.out.println("Search Algorithm Used: " +s.getAlgorithm().getCodename());
         if(s.getHeuristic() != null)
         	System.out.println("Heuristic Used: " +s.getHeuristic());
         else
@@ -160,7 +202,10 @@ public class Graphics extends Application {
             System.out.println("Elapsed Time: " + (s.getElapsedTime() / 1000.0) / 60 + " minutes");
         else
             System.out.println("Elapsed Time: " + s.getElapsedTime() / 1000.0 + " seconds");
-       System.out.println("Solution Depth: " +(s.getMoves().size()-1) +" moves \nRemaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded());
+        
+        if(s.isSolved())
+        	System.out.println("Solution Depth: " +(s.getMoves().size()-1) +"moves");
+        System.out.println("Remaining Frontier Set Size: " +s.getFrontierSize() +"\nAmount of Nodes Expanded: " +s.getNodesExpanded());
     }
     
     @Override
@@ -216,10 +261,10 @@ public class Graphics extends Application {
         System.out.println("Solving map. Please wait...");
         Solution s = artificialIntelligence.solve(b);
         
-        if(s == null)
+        if(!s.isSolved())
         {
-        	System.out.println("Couldn't find a solution for the requested map!");
-        	launchErrorScreen("Couldn't find a solution for the requested map!", primaryStage);
+        	printSolution(s);
+        	launchErrorScreen(getSolutionAnalysis(s), primaryStage);
         	return;
         }
         

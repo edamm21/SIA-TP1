@@ -86,10 +86,10 @@ public class ArtificialIntelligence {
 	        	System.out.println("Heuristic type unknown! Quitting");
 	        	return null;
 	    }
+		long endTime = System.currentTimeMillis();
+		long elapsedTime = endTime - startTime;
     	if(solution != null)
     	{
-    		long endTime = System.currentTimeMillis();
-    		long elapsedTime = endTime - startTime;
             List<Node> path = new ArrayList<>();
             Node n = solution;
             while(n.getParentNode() != null)
@@ -98,9 +98,9 @@ public class ArtificialIntelligence {
                 n = n.getParentNode();
             }
             path.add(0, n);
-            return new Solution(path, elapsedTime, nodesExpanded, frontierNodes, algorithm, heuristic);
+            return new Solution(path, elapsedTime, nodesExpanded, frontierNodes, algorithm, heuristic, true);
     	}
-    	return null;
+    	return new Solution(null, elapsedTime, nodesExpanded, frontierNodes, algorithm, heuristic, false);
     }
 
     private Node solveDFS(Node root) {
