@@ -1,6 +1,12 @@
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.text.CollationElementIterator;
+
 public class Tile extends Rectangle {
 
     private Piece piece;
@@ -21,7 +27,11 @@ public class Tile extends Rectangle {
         setWidth(Graphics.TILE_SIZE);
         setHeight(Graphics.TILE_SIZE);
         relocate(x * Graphics.TILE_SIZE, y * Graphics.TILE_SIZE);
-        Image img = new Image(imageURL);
-        setFill(new ImagePattern(img));
+        File fileImg = new File(imageURL);
+        Image img = new Image(fileImg.toURI().toString());
+        ImagePattern pattern = new ImagePattern(img);
+        setFill(pattern);
+
+
     }
 }

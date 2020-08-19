@@ -10,7 +10,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -26,6 +25,7 @@ public class Graphics extends Application {
     private static Group tileGroup = new Group();
     private static Group pieceGroup = new Group();
     public static final int TILE_SIZE = 50;
+    final String prefix = "assets/";
 
     private Scene createScene(Solution s, Stage stage, int move) {
         if(s.getMoves().get(move) == null)
@@ -80,35 +80,35 @@ public class Graphics extends Application {
         	prevButton.setDisable(true);
         if(move >= s.getMoves().size()-1)
         	nextButton.setDisable(true);
-        
+
         // Draw
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Tile tile;
                 switch (s.getMoves().get(move).getBoard().getBoard()[y][x]) {
                     case '#':
-                        tile = new Tile("/assets/wall.png", x, y);
+                        tile = new Tile(prefix + "wall.png", x, y);
                         break;
                     case '@':
-                        tile = new Tile("/assets/player.png", x, y);
+                        tile = new Tile(prefix + "player.png", x, y);
                         break;
                     case '$':
-                        tile = new Tile("/assets/box.png", x, y);
+                        tile = new Tile(prefix + "box.png", x, y);
                         break;
                     case '+':
-                        tile = new Tile("/assets/player-on-goal.png", x, y);
+                        tile = new Tile(prefix + "player-on-goal.png", x, y);
                         break;
                     case '*':
-                        tile = new Tile("/assets/box-on-goal.png", x, y);
+                        tile = new Tile(prefix + "box-on-goal.png", x, y);
                         break;
                     case ' ':
-                        tile = new Tile("/assets/floor.png", x, y);
+                        tile = new Tile(prefix + "floor.png", x, y);
                         break;
                     case '.':
-                        tile = new Tile("/assets/goal.png", x, y);
+                        tile = new Tile(prefix + "goal.png", x, y);
                         break;
                     default:
-                        tile = new Tile("/assets/floor.png", x, y);
+                        tile = new Tile(prefix + "floor.png", x, y);
                         break;
                 }
                 tileGroup.getChildren().add(tile);
@@ -214,7 +214,7 @@ public class Graphics extends Application {
         String readAlgorithm;
         String readHeuristic;
 		try {
-			List<String> configurations = Files.readAllLines(Paths.get("settings.conf"));
+			List<String> configurations = Files.readAllLines(Paths.get( "../../../settings.conf"));
 			readAlgorithm = configurations.get(0);
 			readHeuristic = configurations.get(1);
 		} catch (IOException e) {
@@ -249,7 +249,7 @@ public class Graphics extends Application {
     	// Read initial board file
         String initBoard;
 		try {
-			initBoard = String.join("\n", Files.readAllLines(Paths.get("map.conf")));
+			initBoard = String.join("\n", Files.readAllLines(Paths.get("../../../map.conf")));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
