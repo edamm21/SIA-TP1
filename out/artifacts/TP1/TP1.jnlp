@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="TP1.jar" size="28015" download="eager" />
+    <jar href="TP1.jar" size="28028" download="eager" />
   </resources>
   <jfx:javafx-desc  width="600" height="400" main-class="Launcher"  name="TP1" />
   <update check="background"/>

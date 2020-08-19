@@ -1,6 +1,9 @@
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+
+import java.io.File;
+
 public class Tile extends Rectangle {
 
     private Piece piece;

@@ -8,7 +8,10 @@
   <component name="ChangeListManager">
     <list default="true" id="bb4d2f3f-41cf-434b-ab9e-d07336065fd7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/TP1/TP1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/TP1/TP1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.conf" beforeDir="false" afterPath="$PROJECT_DIR$/settings.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Graphics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Graphics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tile.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +68,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.08944544" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -217,22 +221,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="362" key="GridCell.Tab.-1.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597085347300" />
-    <state width="1878" height="209" key="GridCell.Tab.0.bottom" timestamp="1597854705009">
+    <state width="1878" height="310" key="GridCell.Tab.0.bottom" timestamp="1597855652784">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="209" key="GridCell.Tab.0.bottom/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597854705009" />
-    <state width="1878" height="209" key="GridCell.Tab.0.center" timestamp="1597854705008">
+    <state width="1878" height="310" key="GridCell.Tab.0.bottom/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597855652784" />
+    <state width="1878" height="310" key="GridCell.Tab.0.center" timestamp="1597855652782">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="209" key="GridCell.Tab.0.center/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597854705008" />
-    <state width="1878" height="209" key="GridCell.Tab.0.left" timestamp="1597854705007">
+    <state width="1878" height="310" key="GridCell.Tab.0.center/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597855652782" />
+    <state width="1878" height="310" key="GridCell.Tab.0.left" timestamp="1597855652782">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="209" key="GridCell.Tab.0.left/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597854705007" />
-    <state width="1878" height="209" key="GridCell.Tab.0.right" timestamp="1597854705008">
+    <state width="1878" height="310" key="GridCell.Tab.0.left/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597855652782" />
+    <state width="1878" height="310" key="GridCell.Tab.0.right" timestamp="1597855652783">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="209" key="GridCell.Tab.0.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597854705008" />
+    <state width="1878" height="310" key="GridCell.Tab.0.right/-1600.0.1600.900/0.0.1920.1080@0.0.1920.1080" timestamp="1597855652783" />
     <state width="1878" height="362" key="GridCell.Tab.1.bottom" timestamp="1597085333792">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
