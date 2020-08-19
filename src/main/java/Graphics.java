@@ -87,28 +87,28 @@ public class Graphics extends Application {
                 Tile tile;
                 switch (s.getMoves().get(move).getBoard().getBoard()[y][x]) {
                     case '#':
-                        tile = new Tile("/assets/wall.png", x, y);
+                        tile = new Tile("wall.png", x, y);
                         break;
                     case '@':
-                        tile = new Tile("/assets/player.png", x, y);
+                        tile = new Tile("player.png", x, y);
                         break;
                     case '$':
-                        tile = new Tile("/assets/box.png", x, y);
+                        tile = new Tile("box.png", x, y);
                         break;
                     case '+':
-                        tile = new Tile("/assets/player-on-goal.png", x, y);
+                        tile = new Tile("player-on-goal.png", x, y);
                         break;
                     case '*':
-                        tile = new Tile("/assets/box-on-goal.png", x, y);
+                        tile = new Tile("box-on-goal.png", x, y);
                         break;
                     case ' ':
-                        tile = new Tile("/assets/floor.png", x, y);
+                        tile = new Tile("floor.png", x, y);
                         break;
                     case '.':
-                        tile = new Tile("/assets/goal.png", x, y);
+                        tile = new Tile("goal.png", x, y);
                         break;
                     default:
-                        tile = new Tile("/assets/floor.png", x, y);
+                        tile = new Tile("floor.png", x, y);
                         break;
                 }
                 tileGroup.getChildren().add(tile);
