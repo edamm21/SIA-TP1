@@ -96,7 +96,9 @@ public class Board {
 			index++;
 		}
 		if(goals < boxes)
-			throw new Exception("Not enough goals for the boxes on this board!");
+			throw new WrongBoardException("Not enough goals for the boxes on this board!");
+		if(boxes < goals)
+			throw new WrongBoardException("Not enough boxes for the goals on this board!");
 	}
 
 	public int getHeight() {
@@ -137,58 +139,6 @@ public class Board {
 	public boolean isCompleted()
 	{
 		return goalPositions.equals(boxPositions);
-	}
-	
-	public boolean canPlayerMoveUp()
-	{
-		if(playerPosition.getRow() == 0)
-			return false;
-		if(board[playerPosition.getRow() - 1][playerPosition.getCol()] == EMPTY_ICON)
-			return true;
-		boolean boxUpOne = board[playerPosition.getRow() - 1][playerPosition.getCol()] == BOX_ICON || board[playerPosition.getRow() - 1][playerPosition.getCol()] == BOX_ON_GOAL_ICON;
-		boolean spaceUpTwo = board[playerPosition.getRow() - 2][playerPosition.getCol()] == EMPTY_ICON || board[playerPosition.getRow() - 2][playerPosition.getCol()] == GOAL_ICON;
-		if(playerPosition.getRow() > 1 && boxUpOne && spaceUpTwo)
-			return true;
-		return false;
-	}
-	
-	public boolean canPlayerMoveRight()
-	{
-		if(playerPosition.getCol() == width)
-			return false;
-		if(board[playerPosition.getRow()][playerPosition.getCol() + 1] == EMPTY_ICON)
-			return true;
-		boolean boxToTheRight = board[playerPosition.getRow()][playerPosition.getCol() + 1] == BOX_ICON || board[playerPosition.getRow()][playerPosition.getCol() + 1] == BOX_ON_GOAL_ICON;
-		boolean spaceToBoxRight = board[playerPosition.getRow()][playerPosition.getCol() + 2] == EMPTY_ICON || board[playerPosition.getRow()][playerPosition.getCol() + 2] == GOAL_ICON;
-		if(playerPosition.getCol() > 1 && boxToTheRight && spaceToBoxRight)
-			return true;
-		return false;
-	}
-	
-	public boolean canPlayerMoveLeft()
-	{
-		if(playerPosition.getCol() == 0)
-			return false;
-		if(board[playerPosition.getRow()][playerPosition.getCol() - 1] == EMPTY_ICON)
-			return true;
-		boolean boxToTheLeft = board[playerPosition.getRow()][playerPosition.getCol() - 1] == BOX_ICON || board[playerPosition.getRow()][playerPosition.getCol() - 1] == BOX_ON_GOAL_ICON;
-		boolean spaceToBoxLeft = board[playerPosition.getRow()][playerPosition.getCol() - 2] == EMPTY_ICON || board[playerPosition.getRow()][playerPosition.getCol() - 2] == GOAL_ICON;
-		if(playerPosition.getCol() > 1 && boxToTheLeft && spaceToBoxLeft)
-			return true;
-		return false;
-	}
-	
-	public boolean canPlayerMoveDown()
-	{
-		if(playerPosition.getRow() == height)
-			return false;
-		if(board[playerPosition.getRow() + 1][playerPosition.getCol()] == EMPTY_ICON)
-			return true;
-		boolean boxDownOne = board[playerPosition.getRow() + 1][playerPosition.getCol()] == BOX_ICON || board[playerPosition.getRow() + 1][playerPosition.getCol()] == BOX_ON_GOAL_ICON;
-		boolean spaceDownTwo = board[playerPosition.getRow() + 2][playerPosition.getCol()] == EMPTY_ICON || board[playerPosition.getRow() + 2][playerPosition.getCol()] == GOAL_ICON;
-		if(playerPosition.getRow() > 1 && boxDownOne && spaceDownTwo)
-			return true;
-		return false;
 	}
 
 	public boolean isValidPositionForPlayer(Position position) {
@@ -350,7 +300,7 @@ public class Board {
 		return possibleMoves;
 	}
 	
-	public int getManhattanDistances()
+	public int getMinTotalFreeBoxToGoal()
 	{
 		if(isCompleted())
 			return 0;
@@ -417,7 +367,27 @@ public class Board {
 		}
 		return closestDistance;
 	}
-	
+
+	public int getMix1_2() {
+		double a = 0.5, b = 0.5;
+		return (int)(a * getMinTotalFreeBoxToGoal() + b * getPlayerClosestBoxDistance());
+	}
+
+	public int getMix1_3() {
+		double a = 0.5, b = 0.5;
+		return (int)(a * getMinTotalFreeBoxToGoal() + b * getRemainingBoxes());
+	}
+
+	public int getMix2_3() {
+		double a = 0.5, b = 0.5;
+		return (int)(a * getPlayerClosestBoxDistance() + b * getRemainingBoxes());
+	}
+
+	public int getAllMixed() {
+		double a = 0.4, b = 0.2, c = 0.4;
+		return (int)(a * getMinTotalFreeBoxToGoal() + b * getPlayerClosestBoxDistance() + c * getRemainingBoxes());
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

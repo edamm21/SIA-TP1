@@ -51,11 +51,19 @@ public class Node {
         switch (heuristic)
         {
             case CLOSEST_GOAL:
-                return board.getManhattanDistances();
+                return board.getMinTotalFreeBoxToGoal();
             case CLOSEST_BOX:
             	return board.getPlayerClosestBoxDistance();
             case BOXES_REMAINING:
             	return board.getRemainingBoxes();
+            case MIX_1_2:
+                return board.getMix1_2();
+            case MIX_1_3:
+                return board.getMix1_3();
+            case MIX_2_3:
+                return board.getMix2_3();
+            case ALL_MIXED:
+                return board.getAllMixed();
             default:
                 return -1;
         }

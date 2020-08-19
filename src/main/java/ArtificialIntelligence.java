@@ -77,11 +77,13 @@ public class ArtificialIntelligence {
         }
         switch (this.heuristic) {
 	        case CLOSEST_GOAL:
-	            break;
 	        case CLOSEST_BOX:
-	        	break;
 	        case BOXES_REMAINING:
-	        	break;
+            case MIX_1_2:
+            case MIX_1_3:
+            case MIX_2_3:
+            case ALL_MIXED:
+                break;
 	        default:
 	        	System.out.println("Heuristic type unknown! Quitting");
 	        	return null;
@@ -191,11 +193,9 @@ public class ArtificialIntelligence {
         Node possibleChildNode = null;
         frontierNodes += boardsToEvaluate.size();
         nodesExpanded++;
-        Map<Integer, Integer> frontierNodesPerDepth = new HashMap<>();
         for(Board board : boardsToEvaluate) {
             possibleChildNode = new Node(board, depth + 1);
             possibleChildNode.setParentNode(currentNode);
-            frontierNodesPerDepth.put(depth, frontierNodes);
             possibleChildNode = solveIDDFSRecursively(possibleChildNode, checkedBoards, pendingNodes, depth + 1);
             if(possibleChildNode != null) {
                 return possibleChildNode;
@@ -329,13 +329,13 @@ public class ArtificialIntelligence {
         		pendingNodes.clear();
         		if(!currentRoots.isEmpty())
         			limit = currentRoots.peek().getHeuristicAndDepthValue(heuristic);
-        		for(Node n : currentRoots)
-        		{
+        		for(Node n : currentRoots) {
         			if(n.getHeuristicAndDepthValue(heuristic) < limit)
         				limit = n.getHeuristicAndDepthValue(heuristic);
         		}
         	}
         }
+        frontierNodes = pendingNodes.size();
         return solution;
     }
     
