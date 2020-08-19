@@ -66,6 +66,8 @@ public class Node {
     	int h = getHeuristicValue(heuristic);
     	if(h == -1)
     		return -1;
-        return depth + getHeuristicValue(heuristic);
+    	if(h == Integer.MAX_VALUE)
+    		return h;
+        return depth + h;
     }
 }

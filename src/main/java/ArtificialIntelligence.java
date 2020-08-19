@@ -311,57 +311,70 @@ public class ArtificialIntelligence {
         return solution;
     }
 
-    private Node solveIDAStarSearch(Node root) {
-        Stack<Integer> checkedBoards = new Stack<>();
-        PriorityQueue<Integer> frontierLimits = new PriorityQueue<>();
+    private Node solveIDAStarSearch(Node root)
+    {
+    	Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+    	Queue<Node> currentRoots = new LinkedList<>();
+    	Queue<Node> pendingNodes = new LinkedList<>();
         Node solution = null;
-        int limit = 0;
-        while(solution == null) {
-            solution = solveIDAStarRecursively(root, checkedBoards, frontierLimits, limit);
-            if(frontierLimits.isEmpty())
-            	return null;
-            limit = frontierLimits.poll();
-            checkedBoards.clear();
+        Node aux = null;
+        int limit = root.getHeuristicAndDepthValue(heuristic);
+        currentRoots.add(root);
+        while(solution == null && !currentRoots.isEmpty())
+        {
+        	aux = currentRoots.poll();
+        	solution = solveIDAStarRecursively(aux, map, pendingNodes, limit);
+        	if(currentRoots.isEmpty()) {
+        		currentRoots.addAll(pendingNodes);
+        		pendingNodes.clear();
+        		if(!currentRoots.isEmpty())
+        			limit = currentRoots.peek().getHeuristicAndDepthValue(heuristic);
+        		for(Node n : currentRoots)
+        		{
+        			if(n.getHeuristicAndDepthValue(heuristic) < limit)
+        				limit = n.getHeuristicAndDepthValue(heuristic);
+        		}
+        	}
         }
         return solution;
     }
-
-    private Node solveIDAStarRecursively(Node currentNode, Stack<Integer> checkedBoards, PriorityQueue<Integer> frontierLimits, int limit)
+    
+    private Node solveIDAStarRecursively(Node currentNode, Map<Integer, Set<Integer>> map, Queue<Node> pendingNodes, int limit)
     {
         if(frontierNodes > 0)
             frontierNodes--;
-        if(currentNode.getBoard().isCompleted())
-            return currentNode;
-        int f = currentNode.getHeuristicAndDepthValue(heuristic);
-
-        if(f > limit) {
-            if(!frontierLimits.contains(f))
-                frontierLimits.add(f);
+    	if(currentNode.getHeuristicAndDepthValue(heuristic) > limit)
+        {
+        	pendingNodes.add(currentNode);
             return null;
         }
-
-        if(checkedBoards.contains(currentNode.getBoard().hashCode()))
-            return null;
-        
-        checkedBoards.push(currentNode.getBoard().hashCode());
+        if(currentNode.getBoard().isCompleted())
+            return currentNode;
         if(currentNode.getBoard().isDeadlock())
-        	return null;
+            return null;
+        for(int i=0; i <= currentNode.getHeuristicAndDepthValue(heuristic); i++)
+        {
+        	if(map.containsKey(i) && map.get(i).contains(currentNode.getBoard().hashCode()))
+        		return null;
+        }
+
+        if(!map.containsKey(currentNode.getHeuristicAndDepthValue(heuristic)))
+        	map.put(currentNode.getHeuristicAndDepthValue(heuristic), new HashSet<>());
+        map.get(currentNode.getHeuristicAndDepthValue(heuristic)).add(currentNode.getBoard().hashCode());
+        
         
         List<Board> boardsToEvaluate = currentNode.getBoard().getPossibleMoves();
         Node possibleChildNode = null;
-        int currentDepth = currentNode.getDepth();
         frontierNodes += boardsToEvaluate.size();
         nodesExpanded++;
         for(Board board : boardsToEvaluate) {
-            possibleChildNode = new Node(board, currentDepth + 1);
+            possibleChildNode = new Node(board, currentNode.getDepth() + 1);
             possibleChildNode.setParentNode(currentNode);
-            possibleChildNode = solveIDAStarRecursively(possibleChildNode, checkedBoards, frontierLimits, limit);
+            possibleChildNode = solveIDAStarRecursively(possibleChildNode, map, pendingNodes, limit);
             if(possibleChildNode != null) {
                 return possibleChildNode;
             }
         }
-        checkedBoards.pop();
         return null;
     }
-
 }
