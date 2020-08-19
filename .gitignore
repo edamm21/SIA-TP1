@@ -49,7 +49,7 @@ hs_err_pid*
 
 # Intellij
 .settings
-.idea/
+.idea/*
 *.iws
 *.iml
 *.iml.bak
