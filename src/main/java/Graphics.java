@@ -259,7 +259,6 @@ public class Graphics extends Application {
         // Solve the challenge
         ArtificialIntelligence artificialIntelligence = new ArtificialIntelligence(algorithm, heuristic);
         System.out.println("Solving map. Please wait...");
-        System.out.println(System.getProperty("user.dir"));
         Solution s = artificialIntelligence.solve(b);
         
         if(!s.isSolved())
