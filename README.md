@@ -87,6 +87,7 @@ Map:
 ###########
 ```
 
+* Configuración 2:
 Settings:
 ```java
 A*
