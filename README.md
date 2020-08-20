@@ -20,7 +20,7 @@
 
 5. Una vez compilado el proyecto, podemos seleccionar las configuraciones para ejecutar el solver. 
 
-* En el archivo ``map.conf`` podemos pegar el ASCII de mapa que queremos evaluar (ejemplos disponibles en la carpeta 'Example-maps'), por ejemplo:  
+* En el archivo ``map.conf`` (ubicado en la raíz del repositorio) podemos pegar el ASCII de mapa que queremos evaluar (ejemplos disponibles en la carpeta 'Example-maps'), por ejemplo:  
 
 ```javascript
 ########
@@ -32,7 +32,7 @@
 ##### 
 ```
 
-* En el archivo ``settings.conf`` podemos elegir en primer instancia el algoritmo de búsqueda y luego la heurística deseada, en líneas separadas, por ejemplo:
+* En el archivo ``settings.conf`` (ubicado en la raíz del repositorio) podemos elegir en primer instancia el algoritmo de búsqueda y luego la heurística deseada, en líneas separadas, por ejemplo:
 
 ```java
 BFS
@@ -66,3 +66,41 @@ Los posibles valores para heurísticas son (case sensitive):
 ``java --module-path %PATH_TO_FX% --add-modules javafx.controls Main``
 
 En caso de realizar modificaciones sobre los archivos de configuración, solo se debe ejecutar este último comando, no se requiere compilar de nuevo.
+
+
+## Configuraciones recomendadas:
+
+* Configuración 1:
+Settings (La heurística elegida da igual ya que BFS es desinformado):
+```java
+BFS
+ALL_MIXED
+```
+
+Map:
+```javascript
+ #########
+##       #
+# $##### ##
+# @  .#   #
+#.  $.$   #
+###########
+```
+
+Settings:
+```java
+A*
+BOXES_REMAINING
+```
+
+Map:
+```javascript
+  #####
+###  .#
+#.@$  ##
+#####  ##
+#. .# $ #
+#$ $#   #
+#       #
+#########
+```
