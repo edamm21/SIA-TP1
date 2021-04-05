@@ -9,6 +9,8 @@
 3. Dentro de una terminal, nos desplazamos a /src/main/java desde la raíz del repositorio
 
 4. Ejecutamos los siguientes comandos para compilar.
+Si javac no es reconocido como comando, es posible que haya que configurar correctamente las variables de entorno para que la línea de comandos lo reconozca.
+Si los flags de javac son rechazados, se recomienda probar con una versión de Java superior a 8.
 
 * Si estamos en Linux/Mac:
 `export PATH_TO_FX=../../../JavaFX/javafx-sdk-11.0.2/lib`
